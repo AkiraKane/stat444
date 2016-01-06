@@ -1,0 +1,92 @@
+\documentclass[12pt]{report}
+\setlength{\textheight}{9.1in}
+\setlength{\textwidth}{7.1in}
+\setlength{\topmargin}{-1.1in} %{-.45in}
+\setlength{\oddsidemargin}{-.18in}
+\usepackage{amssymb,amsmath} 	% math package
+\renewcommand{\baselinestretch}{1.2} 
+\newcommand{\bfmath}[1]{\mbox{\boldmath$#1$\unboldmath}}
+\begin{document}
+\begin{center}
+{\bf STAT444/844/764 ~~~ Assignment \# 1 ~~Winter 2015 ~~Instructor: S. Chenouri}
+\end{center}
+
+\noindent
+{\bf \underline {Due}: Feb. 10, 2015 in class}\\
+In this assignment 
+\begin{itemize}
+\item SJS refers to book ``A Modern Approach to Regression with R" by S. J. Sheather. 
+\item JWHT refers to book ``A Introduction to Statistical Learning with Applications in {\tt R}" by G. James, D. Witten, T. Hastie, and R. Tibshirani. 
+\end{itemize}
+These book are available from the library as ebooks. I do recommend reading these books for parts of the course.
+
+\noindent
+{\bf Instruction: Undergraduate students are only required to do 6 questions. Both graduate and undergraduate student must clearly mention on their submitted solution their level: ``Graduate student" or ``undergraduate student". You must typeset your solution using {\tt Latex}. A  {\tt Latex} template can be find in D2L. Be clear in your solutions and make sure to explain your findings.} \\
+
+\vspace{1mm}
+\noindent
+{\bf Problem 1.} Suppose the error component $\bfmath{\epsilon}$ of the linear regression model has mean $\mathbf{0}$, and variance ${\rm Var}(\bfmath{\epsilon})=\sigma^2\,\mathbf{V}$, where $\mathbf{V}$ is a known $(n\times n)$ positive definite symmetric matrix and $\sigma^2>0$ may not be necessarily known. Let $\widehat{\bfmath{\beta}}_{gls}$ denote the {\it generalized least-squares} (GLS) estimator:
+$$\widehat{\bfmath{\beta}}_{gls}=\arg\min\limits_{\bfmath{\beta}} (\mathbf{Y}-\mathbf{X}\,\bfmath{\beta})^T \,\mathbf{V}^{-1}\,(\mathbf{Y}-\mathbf{X}\,\bfmath{\beta})\,.$$  
+\begin{itemize}
+\item[i) ]
+Show that 
+$$\widehat{\bfmath{\beta}}_{gls}=(\mathbf{X}^T\,\mathbf{V}^{-1}\,\mathbf{X})^{-1}\mathbf{X}^T\,\mathbf{V}^{-1}\,\mathbf{Y}$$
+has expectation $\bfmath{\beta}$ and covariance matrix $${\rm Var}(\widehat{\bfmath{\beta}}_{gls})=\sigma^2(\mathbf{X}^T\,\mathbf{V}^{-1}\,\mathbf{X})^{-1}\,.$$
+\item[ii) ] What would be the consequences of incorrectly using the ordinary least-squares estimator $$\widehat{\bfmath{\beta}}=(\mathbf{X}^T\,\mathbf{X})^{-1}\mathbf{X}^T\,\mathbf{Y}\,,$$ of $\bfmath{\beta}$ when ${\rm Var}(\bfmath{\epsilon})=\sigma^2\,\mathbf{V}$.\\
+\end{itemize}
+
+\noindent
+{\bf Problem 2.} Suppose we assume and fit the model $\mathbf{Y}=\mathbf{X}_{_A}\bfmath{\beta}_{_A}+\bfmath{\epsilon}$. However, the true model is 
+$\mathbf{Y}=\mathbf{X}_{_A}\bfmath{\beta}_{_A}+\mathbf{X}_{_B}\bfmath{\beta}_{_B}+\mathbf{e}$.
+Here $\bfmath{\beta}_{_A}$ is $k_{_A}\times 1$ and $\bfmath{\beta}_{_B}$ is $k_{_B}\times 1$. Show that the OLS estimates, $\widehat{\bfmath{\beta}_{_A}}$ of $\bfmath{\beta}_{_A}$ are the same if $\mathbf{X}_A^T\mathbf{X}_B=\mathbf{0}$. \\
+
+\noindent
+{\bf Problem 3.} Suppose we fit the multiple linear regression model $\mathbf{y}=\mathbf{X}\bfmath{\beta}+\bfmath{\epsilon}$ by least square, where $\mathbf{X}$ is a $n\times (p+1)$ matrix with $p+1$ columns $\mathbf{1},\,\mathbf{x}^{(1)},\dots,\,\mathbf{x}^{(p-1)},\, \mathbf{x}^{(p)}$. 
+\begin{itemize}
+\item Regress $\mathbf{Y}$ on $\mathbf{1},\,\mathbf{x}^{(1)},\dots,\, \mathbf{x}^{(p-1)}$ and denote the residual vector by $\widehat{\bfmath \epsilon}^{(-p)}$.
+\item Regress $\mathbf{x}^{(p)}$ on $\mathbf{1},\,\mathbf{x}^{(1)},\dots,\, \mathbf{x}^{(p-1)}$ and denote the residual vector by $\widehat{\delta}^{(-p)}$.
+\item Fit $\widehat{\epsilon}_i^{(-p)}=\beta_{p}\,\widehat{\delta}_i^{(-p)}+e_i$ to obtain $\widehat{\beta}_{p}$. Show that this is exactly the OLS estimate when you fit $\mathbf{y}=\mathbf{X}\bfmath{\beta}+\bfmath{\epsilon}$ 
+\end{itemize}
+
+\noindent
+{\bf Problem 4.} Instead of plotting the residuals $\widehat{\epsilon}_i$ versus the fitted values $\widehat{Y}_i$ to look for dependencies of the variance on the magnitude of $Y$, one might think of plotting residuals versus the $Y_i$ values. 
+\begin{itemize}
+\item[(a)] When $\mathbf{y}=\mathbf{X}\bfmath{\beta}+\bfmath{\epsilon}$, a model including an intercept term, is fitted by least squares, show that the sample correlation between the least-squares residuals, $\widehat{\epsilon}_1,\,\dots,\,\widehat{\epsilon}_n$, and $Y_1,\,\dots,\,Y_n$ is $\sqrt{1-R^2}$, where $R^2$ is the square of the coefficient of determination (also known as multiple correlation coefficient).
+\item[(b)] Does the result in part (a) depends on assumptions about the errors $\epsilon_1,\,\dots,\,\epsilon_n$ in the model $\mathbf{y}=\mathbf{X}\bfmath{\beta}+\bfmath{\epsilon}$?
+\item[(c)] Why then is a plot of $\widehat{\epsilon}_1,\,\dots,\,\widehat{\epsilon}_n$ against $Y_1,\,\dots,\,Y_n$ not a useful diagnostic plot?    
+\end{itemize}
+
+\noindent
+{\bf Problem 5.} Consider the fitted values that result from performing linear regression without an intercept. In this setting, the $i$th fitted value takes the form $\widehat{y}_i=\widehat{\beta}\,x_i$, where
+$$\widehat{\beta}=\frac{\sum\limits_{i=1}^nx_i\,y_i}{\sum\limits_{j=1}^nx_j^2}\,.$$
+Show that we can write $\widehat{y}_i=\sum\limits_{j=1}^na_j\,y_j$. What is $a_j$?
+
+\noindent
+{\bf Problem 6.} (from the book JWHT) In this problem you will create some simulated data and fit simple linear regression models to it. Make sure to use {\tt set.seed(1)} prior to starting part (a) to ensure consistent results. 
+\begin{itemize}
+\item[(a) ] Using the {\tt rnorm()} function, create a vector, {\tt x}, containing 100 observations drawn from a $N(0,\,1)$ distribution. This represents a feature, $X$.  
+\item[(b) ] Using the {\tt rnorm()} function, create a vector, {\tt eps}, containing 100 observations drawn from a $N(0,\,0.25)$ distribution that is a normal distribution with mean zero and variance 0.25.
+\item[(c) ] Using {\tt x} and {\tt eps}, generate a vector {\tt y} according to the model\begin{equation}\label{eq}
+Y =-1+0.5\,X+\epsilon
+\end{equation}What is the length of the vector {\tt y}? What are the values of $\beta_0$ and $\beta_1$ in this linear model?
+\item[(d) ] Create a scatterplot displaying the relationship between {\tt x} and {\tt y}. Comment on what you observe.
+\item[(e) ] Fit a least squares linear model to predict {\tt y} using {\tt x}. Comment on the model obtained. How do $\widehat{\beta}_0$ and $\widehat{\beta}_1$ compare to $\beta_0$ and $\beta_1$?
+\item[(f) ] Display the least squares line on the scatterplot obtained in (d). Draw the population regression line on the plot, in a different color. Use the {\tt legend()} command to create an appropriate legend.\item[(g) ] Now fit a polynomial regression model that predicts {\tt y} using {\tt x} and ${\tt x^2}$. Is there evidence that the quadratic term improves the model fit? Explain your answer.\item[(h) ] Repeat (a)?(f) after modifying the data generation process in such a way that there is less noise in the data. The model \eqref{eq} should remain the same. You can do this by decreasing the variance of the normal distribution used to generate the error term $\epsilon$ in (b). Describe your results.
+\item[(i) ] Repeat (a)?(f) after modifying the data generation process in such a way that there is more noise in the data. The model \eqref{eq} should remain the same. You can do this by increasing the variance of the normal distribution used to generate the error term $\epsilon$ in (b). Describe your results.
+\item[(j) ] What are the confidence intervals for $\beta_0$ and $\beta_1$ based on the original data set, the noisier data set, and the less noisy data set? Comment on your results.
+\end{itemize}
+
+\noindent
+{\bf Problem 7.} This question involves the use of multiple linear regression on the {\tt Auto.csv} data set posted in {\tt D2L}.
+\begin{itemize}\item[(a) ] Produce a scatterplot matrix which includes all of the variables in the data set.\item[(b) ] Compute the matrix of correlations between the variables using the function {\tt cor()}. You will need to exclude the name variable, which is qualitative.\item[(c) ] Use the {\tt lm()} function to perform a multiple linear regression with {\tt mpg} as the response and all other variables except {\tt name} as the predictors. Use the {\tt summary()} function to print the results. Comment on the output. For instance:
+\begin{itemize}\item[i. ] Is there a relationship between the predictors and the response?\item[ii. ] Which predictors appear to have a statistically significant relationship to the response?\item[iii. ] What does the coefficient for the year variable suggest?
+\end{itemize}
+\item[(d) ] Use the {\tt plot()} function to produce diagnostic plots of the linear regression fit. Comment on any problems you see with the fit. Do the residual plots suggest any unusually large outliers? Does the leverage plot identify any observations with unusually high leverage?\item[(e) ] Use the * and : symbols to fit linear regression models with interaction effects. Do any interactions appear to be statistically significant?\item[(f) ] Try a few different transformations of the variables, such as $\log(X)$, $\sqrt{X}$, $X^2$. Comment on your findings.
+\end{itemize}
+ 
+\noindent 
+{\bf Problem 8.} (from the book SJS) Obtain the dataset ``{\tt overdue.txt}" from the D2L. This problem is based on CASE 32 - Overdue Bills from Bryant and Smith (1995). Quick Stab Collection Agency (QSCA) is a bill-collecting agency that specializes in collecting small accounts. To distinguish itself from competing collection agencies, the company wants to establish a reputation for collecting delinquent accounts quickly. The marketing department has just suggested that QSCA adopt the slogan: ``nder 60 days or your money back!!!!"
+You have been asked to look at account balances. In fact, you suspect that the number of days to collect the payment is related to the size of the bill. If this is the case, you may be able to estimate how quickly certain accounts are likely to be collected, which, in turn, may assist the marketing department in determining an appropriate level for the money-back guarantee.
+To test this theory, a random sample of accounts closed out during the months of January through June has been collected. The data set includes the initial size of the account and the total number of days to collect payment in full. Because QSCA deals in both household and commercial accounts in about the same proportion, an equal number have been collected from both groups. The first 48 observations in the data set are residential accounts and the second 48 are commercial accounts. In the data set ``{\tt overdue.txt}", the variable LATE is the number of days the payment is overdue, BILL is the amount of the overdue bill in dollars and TYPE identifies whether an account is RESIDENTIAL or COMMERCIAL.Develop a regression model to predict LATE from BILL.
+
+\end{document} 

@@ -1,0 +1,411 @@
+\documentclass[11pt]{report}
+\setlength{\textheight}{9.1in}
+\setlength{\textwidth}{7.1in}
+\setlength{\topmargin}{-1.1in} %{-.45in}
+\setlength{\oddsidemargin}{-.18in}
+\usepackage{amssymb,amsmath,cancel,listings,tikz,parskip} 	% math package
+\renewcommand{\baselinestretch}{1.2} 
+\newcommand{\bfmath}[1]{\mbox{\boldmath$#1$\unboldmath}}
+\begin{document}
+%\hfill \underline{{\bf PAGE 1}}
+\begin{center}
+{\bf STAT444/844/CM764 ~~~ Assignment \# 4 ~~Winter 2015 ~~Instructor: S. Chenouri}
+{\bf Student: Christopher Alert : Undergraduate student}
+\end{center} 
+\noindent
+{\bf \underline {Due}: April 6, 2015}\\
+
+\noindent
+{\bf Problem 1.} Consider the data set {\tt mcycle} in library {\tt MASS} of {\tt R}. This is a data frame giving a series of measurements of head acceleration in a simulated motorcycle accident, used to test crash helmets. Use wavelets expansion to regress acceleration as function of time with both soft and hard thresholding. Apply universal, sure and cv selection of the thresholding parameter. Plot you estimates.  \\
+
+\begin{verbatim}
+library(MASS); library(wavethresh)library(waveslim)
+# Wavelets to regress acceleration ~ time w/ soft and hard thresh
+# universal, sure and cv selection
+# plot estimates
+x<-mcycle$times
+Y<-mcycle$accel
+set.seed(1)
+Ytrans <- Y[1:128]
+xtrans <- x[1:128]
+set.seed(1)
+par(mfrow=c(1,1))
+plot(xtrans,Ytrans,ylab="Acceleration",main="scatter plot")
+lines(xtrans,Ytrans,lwd=3,col="blue")
+\end{verbatim}
+
+\includegraphics[scale=0.4]{a4q11.png}
+
+\begin{verbatim}
+# Universal
+par(mfrow=c(2,2))
+# soft thresholding with universal tuning using function threshold() 
+Ywd<-wd(Ytrans,filter.number=1,family="DaubExPhase")
+plot(Ywd,main="wavelet coefficients")
+accelsoft<-threshold(Ywd,type="soft",policy="universal")
+# inverting the wavelet transformatuion to get the fitted values # using function wr()
+unifitted<-wr(accelsoft)
+plot(xtrans,Ytrans,ylab="Y",main="scatter plot & wavelet soft thresholding")
+lines(xtrans,unifitted,lwd=3,col="blue")
+plot(xtrans,unifitted,ylab="Y",main="Wavelet soft thresholding", type="l",lwd=3,col="blue")
+## hard thresholding with universal tuning using function threshold() 
+hardthresh<-threshold(Ywd,type="hard",policy="universal")
+# inverting the wavelet transformatuion to get the fitted values using function wr() 
+hardfit<-wr(hardthresh)
+plot(xtrans,Ytrans,ylab="Y",main="scatter plot & wavelet hard thresholding") 
+lines(xtrans,hardfit,lwd=3,col="blue")
+plot(xtrans,hardfit,ylab="Y",main="Wavelet hard thresholding", type="l",lwd=3,col="blue")
+\end{verbatim}
+
+\includegraphics[scale=0.4]{a4q12.png}
+
+\begin{verbatim}
+# SURE
+par(mfrow=c(3,2))
+# soft thresholding with sure tuning using function threshold() 
+Ywd<-wd(Ytrans,filter.number=1,family="DaubExPhase")
+plot(Ywd,main="wavelet coefficients")
+accelsoft<-threshold(Ywd,type="soft",policy="sure")
+# inverting the wavelet transformatuion to get the fitted values # using function wr()
+unifitted<-wr(accelsoft)
+plot(xtrans,Ytrans,ylab="Y",main="scatter plot & wavelet soft thresholding")
+lines(xtrans,unifitted,lwd=3,col="blue")
+plot(xtrans,unifitted,ylab="Y",main="Wavelet soft thresholding", type="l",lwd=3,col="blue")
+## hard thresholding with universal tuning using function threshold() 
+hardthresh<-threshold(Ywd,type="hard",policy="universal")
+# inverting the wavelet transformatuion to get the fitted values using function wr() 
+hardfit<-wr(hardthresh)
+plot(xtrans,Ytrans,ylab="Y",main="scatter plot & wavelet hard thresholding") 
+lines(xtrans,hardfit,lwd=3,col="blue")
+plot(xtrans,hardfit,ylab="Y",main="Wavelet hard thresholding", type="l",lwd=3,col="blue")
+\end{verbatim}
+
+\includegraphics[scale=0.4]{a4q13.png}
+
+\begin{verbatim}
+# CV
+par(mfrow=c(3,2))
+# soft thresholding with cv tuning using function threshold() DopplerSoft<-threshold(Ywd,type="soft",policy="cv")
+Ywd<-wd(Ytrans,filter.number=1,family="DaubExPhase")
+plot(Ywd,main="wavelet coefficients")
+accelsoft<-threshold(Ywd,type="soft",policy="cv")
+# inverting the wavelet transformatuion to get the fitted values # using function wr()
+unifitted<-wr(accelsoft)
+plot(xtrans,Ytrans,ylab="Y",main="scatter plot & wavelet soft thresholding")
+lines(xtrans,unifitted,lwd=3,col="blue")
+plot(xtrans,unifitted,ylab="Y",main="Wavelet soft thresholding", type="l",lwd=3,col="blue")
+## hard thresholding with universal tuning using function threshold() 
+hardthresh<-threshold(Ywd,type="hard",policy="universal")
+# inverting the wavelet transformatuion to get the fitted values using function wr() 
+hardfit<-wr(hardthresh)
+plot(xtrans,Ytrans,ylab="Y",main="scatter plot & wavelet hard thresholding") 
+lines(xtrans,hardfit,lwd=3,col="blue")
+plot(xtrans,hardfit,ylab="Y",main="Wavelet hard thresholding", type="l",lwd=3,col="blue")
+\end{verbatim}
+
+\includegraphics[scale=0.4]{a4q14.png}
+
+\noindent
+\newpage
+{\bf Problem 2. (From JWHT)} This question relates to the {\tt College} data set.
+\begin{itemize}
+\item[i. ] Split the data into a training set and a test set. Using out-of-state tuition as the response and the other variables as the predictors, perform forward stepwise selection on the training set in order to identify a satisfactory model that uses just a subset of the predictors.
+
+\begin{verbatim}
+library(leaps) ; library(caret)
+set.seed(1)
+college <- read.csv(file = "~/Dropbox//Academic notes//5 A//STAT 444//Assignments//A4//College.csv")
+college <- college[,-1]
+inTrain  <- sample(length(college$Apps), length(college$Apps) *.6)
+Train    <- college[inTrain,]
+CV_Test  <- college[-inTrain,]
+# Forward stepwise selection
+outstate.mod <- regsubsets(Outstate ~ ., data = Train, nvmax = 17, method = "forward")
+summary(outstate.mod)
+par(mfrow = c(1, 3))
+min.bic <- min(summary(outstate.mod)$bic)
+#Minimizing BIC
+predictors <- coef(outstate.mod, id = which(min.bic == summary(outstate.mod)$bic))
+#
+names(predictors)
+\end{verbatim}
+
+The subset of predictors chosen by forward selection were: "Private","Apps","Accept","Enroll","Room.Board","Personal","Terminal","S.F.Ratio","perc.alumni","Expend" and "Grad.Rate".
+
+\item[ii. ] Fit a GAM on the training data, using out-of-state tuition as the response and the features selected in the previous step as the predictors. Plot the results, and explain your findings.
+
+\begin{verbatim}
+# ii GAM
+library(gam)
+opt.outstate.mod <- gam(Outstate ~ Private + s(Room.Board) + s(PhD) + s(perc.alumni) + s(Expend) + s(Grad.Rate) +
+                   s(Personal), data=Train)
+par(mfrow = c(3, 3))
+plot(opt.outstate.mod, se = T, col = "blue")
+\end{verbatim}
+
+\includegraphics[scale=0.4]{gamlinplots.png}
+
+Looking at the plots, perc.alumni and Grad.rate seem qasi-linear and potentially a linear fit is more suited to those variables.
+
+\item[iii. ] Evaluate the model obtained on the test set, and explain the results obtained.
+
+\begin{verbatim}
+## iii test set evaluation
+outstate.test.pred <- predict(opt.outstate.mod, CV_Test)
+outstate.test.error <- mean((CV_Test$Outstate - outstate.test.pred)^2)
+outstate.test.error
+> outstate.test.error
+[1] 3563769
+RMSE <- sqrt(outstate.test.error)
+RMSE
+> RMSE
+[1] 1887.795
+tss <- mean((CV_Test$Outstate - mean(CV_Test$Outstate))^2)
+rsq <- 1 - outstate.test.error / tss
+rsq
+> rsq
+[1] 0.7731303
+\end{verbatim}
+
+The r squared is .77 which means the variables explain about 77\% of the variation in the data. Also, the RMSE is a mere 30\% of the minimum Outstate tuition value in the test set. These things in combination can be taken as a sign that the model performs reasonably well.
+
+\item[iv. ] For which variables, if any, is there evidence of a non-linear relationship with the response?
+\begin{verbatim}
+> summary(opt.outstate.mod)
+
+Call: gam(formula = Outstate ~ Private + s(Room.Board) + s(PhD) + s(perc.alumni) + 
+    s(Expend) + s(Grad.Rate) + s(Personal), data = Train)
+Deviance Residuals:
+     Min       1Q   Median       3Q      Max 
+-7193.05 -1081.55    63.43  1255.13  6810.83 
+
+(Dispersion Parameter for gaussian family taken to be 3356215)
+
+    Null Deviance: 7673911752 on 465 degrees of freedom
+Residual Deviance: 1476736498 on 440.0005 degrees of freedom
+AIC: 8351.964 
+
+Number of Local Scoring Iterations: 2 
+
+Anova for Parametric Effects
+                Df     Sum Sq    Mean Sq  F value    Pr(>F)    
+Private          1 2090970443 2090970443 623.0144 < 2.2e-16 ***
+s(Room.Board)    1 1457294842 1457294842 434.2078 < 2.2e-16 ***
+s(PhD)           1  459304097  459304097 136.8518 < 2.2e-16 ***
+s(perc.alumni)   1  334861764  334861764  99.7736 < 2.2e-16 ***
+s(Expend)        1  614933721  614933721 183.2224 < 2.2e-16 ***
+s(Grad.Rate)     1   74120820   74120820  22.0846 3.494e-06 ***
+s(Personal)      1   15834013   15834013   4.7178   0.03038 *  
+Residuals      440 1476736498    3356215                       
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Anova for Nonparametric Effects
+               Npar Df  Npar F     Pr(F)    
+(Intercept)                                 
+Private                                     
+s(Room.Board)        3  4.4963  0.004029 ** 
+s(PhD)               3  2.4041  0.066916 .  
+s(perc.alumni)       3  2.2118  0.086049 .  
+s(Expend)            3 25.9118 1.887e-15 ***
+s(Grad.Rate)         3  1.9283  0.124229    
+s(Personal)          3  3.3042  0.020217 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+\end{verbatim}
+
+The variables Room.Board, Expend and Personal have statistically significant spline fits. The others are close but do not pass the <0.05 p-value test of significance. 
+
+\end{itemize}
+
+\noindent
+\newpage 
+{\bf Problem 3.} Let $X_1,\,\dots,\,X_n\sim f$ and let $\widehat{f}_n$ be the kernel density estimator using the boxcar kernel: 
+$$K(x)=\begin{cases}
+1 & \quad -\frac{1}{2}<x<\frac{1}{2}\\
+0 & \quad \text{otherwise.} 
+\end{cases}$$
+\begin{itemize}
+\item[i) ] Show that $$E\left[ \widehat{f}_n(x)\right]=\frac{1}{h}\int_{x-h/2}^{x+h/2}\,f(y)\,dy$$
+and 
+$$\text{Var}\left[\widehat{f}_n(x)\right]=\dfrac{1}{n\,h^2}\left[\int_{x-h/2}^{x+h/2}\,f(y)\,dy-\left( \int_{x-h/2}^{x+h/2}\,f(y)\,dy\right)^2 \right]\,.$$
+
+{\bf Solution:}
+
+$$ \widehat{f}_n(x) = \frac{1}{n}\,\sum\limits_{i=1}^n\,\frac{1}{h}\,\mathbf{K}\,\left(\,\frac{\mathbf{x - x_i}}{h}\right) $$
+$$ E\left[\widehat{f}_n(x) \right] = \left[\,\frac{1}{h}\,\mathbf{K}\,\left(\,\frac{\mathbf{x - x_i}}{h}\right)\,\right] $$
+$$ E\left[\widehat{f}_n(x) \right] = \int_{-\infty}^{\infty} \,\frac{1}{h}\,\mathbf{K}\,\left(\,\frac{\mathbf{x - x_i}}{h}\right)\,\mathbf{f(y)}\,\mathbf{dy} $$
+$$ E\left[\widehat{f}_n(x) \right] = \frac{1}{h}\,\int_{-\infty}^{\infty} \,\,\mathbf{K}\,\left(\,\frac{\mathbf{x - x_i}}{h}\right)\,\mathbf{f(y)}\,\mathbf{dy} $$
+
+aside:
+$$\,\mathbf{K}\,\left(\,\frac{\mathbf{x - x_i}}{h}\right)\, => E\left[\,\mathbf{I(x-y)} \leq \frac{\mathbf{h}}{2}\,\right] $$
+
+since: $$K(x)=\begin{cases}
+1 & \quad -\frac{1}{2}<x<\frac{1}{2}\\
+0 & \quad \text{otherwise.} 
+\end{cases}$$
+
+$$\,\mathbf{K}\,\left(\,\frac{\mathbf{x - x_i}}{h}\right)\, => P\left(\,\mathbf{|x-y|} \leq \frac{\mathbf{h}}{2}\,\right) $$
+$$\,\mathbf{K}\,\left(\,\frac{\mathbf{x - x_i}}{h}\right)\, => P\left(-\frac{h}{2}\,\leq\,\mathbf{x-y} \leq \frac{\mathbf{h}}{2}\,\right) $$
+$$\,\mathbf{K}\,\left(\,\frac{\mathbf{x - x_i}}{h}\right)\, => P\left(x-\frac{h}{2}\,\leq\,\mathbf{y} \leq x +\frac{\mathbf{h}}{2}\,\right) $$
+
+Hence:
+
+$$ E\left[\widehat{f}_n(x) \right] = \frac{1}{h}\,\int_{x-\frac{h}{2}}^{x +\frac{\mathbf{h}}{2}} \,\mathbf{f(y)}\,\mathbf{dy} $$
+
+and for Variance,
+
+$$\text{Var}\left[\widehat{f}_n(x)\right] =  \frac{1}{n}\,\text{Var}\left[\,\frac{1}{h}K(\,\frac{x-x_i}{h})\,\right]$$
+$$\text{Var}\left[\widehat{f}_n(x)\right] =  \frac{1}{n\,h^{2}}\,\text{Var}\left[K(\,\frac{x-x_i}{h})\,\right]$$
+
+and we know that $ Var(X) = E[X^{2}] - (E[X])^2 $ so,
+
+$$\text{Var}\left[\widehat{f}_n(x)\right] =  \frac{1}{n\,h^{2}}\,\text{Var}\left[\,K(\,\frac{x-x_i}{h})\,\right]$$
+$$\text{Var}\left[\widehat{f}_n(x)\right] =  \frac{1}{n\,h^{2}}\,\left[\,\int_{-\infty}^{\infty} \,\left(\,\mathbf{K}\,\left(\,\frac{\mathbf{x - x_i}}{h}\right)\,\right)^{2}\,\mathbf{f(y)}\,\mathbf{dy}\, - \left(\,\int_{x-\frac{h}{2}}^{x +\frac{\mathbf{h}}{2}} \,\mathbf{f(y)}\,\mathbf{dy}\,\right)^{2}\right]$$
+
+similar to above, $\left(\,\mathbf{K}\,\left(\,\frac{\mathbf{x - x_i}}{h}\right)\,\right)^{2}$ is non-zero (and equal to 1 in particular) only on the interval $[x -\frac{\mathbf{h}}{2},x +\frac{\mathbf{h}}{2}]$
+
+Hence we get:
+
+$$\text{Var}\left[\widehat{f}_n(x)\right] =  \frac{1}{n\,h^{2}}\,\left[\,\int_{x-\frac{h}{2}}^{x +\frac{\mathbf{h}}{2}}\,\mathbf{f(y)}\,\mathbf{dy}\, - \left(\,\int_{x-\frac{h}{2}}^{x +\frac{\mathbf{h}}{2}}\,\mathbf{f(y)}\,\mathbf{dy}\,\right)^{2}\right]$$
+
+\item[ii) ] Show that if $h\rightarrow 0$ and $n\,h\rightarrow \infty$ as $n\rightarrow \infty$ then $\widehat{f}_n(x)\xrightarrow{P} f(x)$. 
+
+By Theorem from class, we know the risk of the Nadaraya-Watson kernel estimator $\widehat{f}_n(x)$  is :
+
+$$ R(\widehat{f}_n(x),f) = \frac{h^4}{4}\,\left(\,\int_{-\infty}^{\infty}x^2K(x)\right)^{2}\,\int_{-\infty}^{\infty}\,\left(f''(x) + 2f'(x)\frac{g'(x)}{g(x)}\,\right)^{2}dx $$
+$$+ \frac{\sigma^{2}\,\int_{-\infty}^{\infty}K^{2}(x)dx}{nh}\,\int_{-\infty}^{\infty}\frac{dx}{g(x)} + o(nh^{-1} + o(h^{4}) $$
+
+as $h \rightarrow 0$ and $nh \rightarrow \infty$, with $o(x)$ meaning that $ \lim_{x \to 0} \frac{o(x)}{x} = 0$. Also, as $n \rightarrow \infty$ , we get more data and the bandwidth can shrink, $h \rightarrow 0$ but more slowly than $\frac{1}{n}$ so $ nh \rightarrow \infty$. Hence:
+
+$$ R(\widehat{f}_n(x),f) \xrightarrow{P} \frac{h^4}{4}\,\left(\,\int_{x-\frac{h}{2}}^{x +\frac{\mathbf{h}}{2}}x^2\right)^{2}\,\int_{x-\frac{h}{2}}^{x +\frac{\mathbf{h}}{2}}\,\left(f''(x) + 2f'(x)\frac{g'(x)}{g(x)}\,\right)^{2}dx $$
+$$+ \frac{\sigma^{2}\,\int_{x-\frac{h}{2}}^{x +\frac{\mathbf{h}}{2}}dx}{nh}\,\int_{-\infty}^{\infty}\frac{dx}{g(x)} + o(nh^{-1} + o(h^{4}) $$
+
+as $h \rightarrow 0$ and $nh \rightarrow \infty$. Therefore, the whole expression $ R(\widehat{f}_n(x),f) \xrightarrow{P} 0 $ and hence $\widehat{f}_n(x) \xrightarrow{P} f(x)$
+\end{itemize}
+
+\noindent
+\newpage 
+{\bf Problem 4.} Data on the salaries of the chief executive officer of 60 companies are available on the course page in D2L. 
+Investigate the distribution of salaries using a histogram and a kernel density estimator. Use least squares cross-validation to choose the amount of smoothing. Also consider the Normal reference rule for picking a bandwidth for the kernel. There appear to be a few bumps in the density. Are they real? Use confidence bands to address this question. Finally, try using various kernel shapes and comment on the resulting estimates. 
+
+\begin{verbatim}
+salaries <- read.csv(file = "~/Dropbox//Academic notes//5 A//STAT 444//Assignments//A4//ceosalareis.txt",sep = "")
+# Cleaning data
+salaries<- salaries[-which(salaries$SAL == "*"),]
+salaries[,2] <- factor(salaries[,2])
+salaries$SAL <- as.numeric(levels(salaries$SAL))[salaries$SAL]
+\end{verbatim}
+ Investigating the distribution via histogram
+\begin{verbatim}
+par(mfrow = c(1, 3))
+hist(x=salaries$SAL,breaks=seq(from=21,to=1150,by=30))
+LSCV <- function(resp, binwidth){
+        n <- length(resp)
+        constant <- 2 / ((n - 1)*binwidth)
+        term21 <- (n+1)/((n-1)*binwidth)
+        bins <- seq(from=summary(resp)[1],to=summary(resp)[6],by= binwidth)
+        pk <- rep(0,length(bins)-1)
+        for(i in 1:length(bins)-1){
+                pk[i] <- sum(resp > bins[i] & resp < bins[i+1])/n
+        }
+        pk2 <- pk^2
+        term22 <- sum(pk2)
+        term2 <- term21*term22
+        return(constant - term2)
+}
+
+lscvs<- seq(15,500,5)
+for(i in 1:length(lscvs)){
+        lscvs[i]<- LSCV(salaries$SAL,lscvs[i])        
+}
+plot(lscvs)
+which(min(lscvs) == lscvs)
+seq(15,500,5)[which(min(lscvs) == lscvs)]
+hist(x=salaries$SAL,breaks=seq(from=21,to=1246,by=175))
+\end{verbatim}
+
+Using LSCV , the optimal bandwidth was chosen and the rightmost histogram was obtained.
+
+\includegraphics[scale=0.4]{histoanalysis.png}
+
+Next, the kernel density estimator:
+\begin{verbatim}
+par(mfrow=c(1,3))
+# reference y
+## Normal reference rule is the default for R
+normrefrule <- 3.5*sqrt(var(salaries$SAL))*(length(salaries$SAL))^-(1/3)
+
+bins <- seq(from=summary(salaries$SAL)[1] - 1,
+            to=summary(salaries$SAL)[6]+1,
+            by= normrefrule)
+bins <- c(bins,bins[4]+normrefrule)
+pk <- rep(0,length(bins)-1)
+for(i in 1:length(bins)-1){
+        pk[i] <- sum(salaries$SAL > bins[i] & salaries$SAL < bins[i+1])/length(salaries$SAL)
+}
+fhat <- pk/normrefrule
+yfhat <- c(rep(fhat[1],13),rep(fhat[2],17),rep(fhat[3],16),rep(fhat[4],13))
+#
+smooth.matrix<-function(x,h){
+        n<-nrow(x)
+        A<-matrix(0,n,n)
+        for (i in 1:n){
+                y<-rep(0,n)
+                y[i]=1
+                dens <- density(x$SAL,bw=h)
+                BAR <- with(dens, approxfun(x = x, y = y))
+                yi=with(x, BAR(x$AGE))
+                A[,i]=yi
+        }
+        return((A+t(A))/2)
+}
+#
+h <- seq(50,300,10)
+GCVs <- seq(50,300,10)
+for(i in 1:length(h)){
+        S <- smooth.matrix(salaries,GCVs[i])
+        vonn <- sum(diag(S)) / nrow(salaries)
+        dens <- density(salaries$SAL,bw=h[i])
+        BAR <- with(dens, approxfun(x = x, y = y))
+        num <- (yfhat - with(salaries, BAR(salaries$AGE)))
+        denom <- 1 - vonn
+        quotient <- (num/denom)^2
+        GCVs[i]<- (mean(quotient))
+}
+plot(x=h,y=GCVs)
+minh <- h[which(min(GCVs) == GCVs)]
+sal.density <- density(salaries$SAL,bw=minh)
+plot(sal.density,main="Density of CEO Salaries with GCV determined bandwidth")
+#
+n <- length(salaries$SAL)
+sig <- min(sd(salaries$SAL),IQR(salaries$SAL))
+normref <- 1.06*sig*n^-(1/5)
+sal.density <- density(salaries$SAL,bw=normref)
+plot(sal.density,main="Density plot of CEO Salaries with Normal reference rule")
+dn <- cumsum(salaries$SAL)/sum(salaries$SAL)
+li <- which(dn>=0.05)[1]
+ui <- which(dn>=0.95)[1]
+abline(v=salaries$SAL[order(salaries$SAL)][c(li,ui)],lty=2)
+axis(side=1, at=c(149,808), labels=c(149,808))
+\end{verbatim}
+
+\includegraphics[scale=0.4]{kernanalysis.png}
+
+The bumps more or less fall within the confidence bands and so they may not be "real bumps".
+
+\begin{verbatim}
+par(mfrow=c(2,3))
+plot(density(salaries$SAL,bw=normref,kernel="gaussian"),main="Gaussian density")
+plot(density(salaries$SAL,bw=normref,kernel="epanechnikov"),main="Epanechinkov density")
+plot(density(salaries$SAL,bw=normref,kernel="rectangular"),main="Rectangular density")
+plot(density(salaries$SAL,bw=normref,kernel="cosine"),main="Cosine density")
+plot(density(salaries$SAL,bw=normref,kernel="biweight"),main="Biweight density")
+plot(density(salaries$SAL,bw=normref,kernel="triangular"),main="Triangular density")
+\end{verbatim}
+
+\includegraphics[scale=0.4]{kernanalysis2.png}
+
+Little difference in the densities. The rectangular kernel is very noisy but there is little difference between the other kernels for a given bandwidth.
+
+\end{document} 

@@ -1,0 +1,46 @@
+\documentclass[11pt]{report}
+\setlength{\textheight}{9.1in}
+\setlength{\textwidth}{7.1in}
+\setlength{\topmargin}{-1.1in} %{-.45in}
+\setlength{\oddsidemargin}{-.18in}
+\usepackage{amssymb,amsmath} 	% math package
+\renewcommand{\baselinestretch}{1.2} 
+\newcommand{\bfmath}[1]{\mbox{\boldmath$#1$\unboldmath}}
+\begin{document}
+%\hfill \underline{{\bf PAGE 1}}
+\begin{center}
+{\bf STAT444/844/CM764 ~~~ Assignment \# 4 ~~Winter 2015 ~~Instructor: S. Chenouri}
+\end{center} 
+\noindent
+{\bf \underline {Due}: April 6, 2015}\\
+
+\noindent
+{\bf Instruction: Both graduate and undergraduate students must clearly mention on submitted solution their level: ``Graduate student" or ``Undergraduate student". You must typeset your solution using {\tt Latex}. A  {\tt Latex} template can be find in D2L. Be clear in your solutions and make sure to explain your findings.} \\
+\vspace{1mm} 
+
+\noindent
+{\bf Problem 1.} Consider the data set {\tt mcycle} in library {\tt MASS} of {\tt R}. This is a data frame giving a series of measurements of head acceleration in a simulated motorcycle accident, used to test crash helmets. Use wavelets expansion to regress acceleration as function of time with both soft and hard thresholding. Apply universal, sure and cv selection of the thresholding parameter. Plot you estimates.  \\
+
+\noindent
+{\bf Problem 2. (From JWHT)} This question relates to the {\tt College} data set.
+\begin{itemize}\item[i. ] Split the data into a training set and a test set. Using out-of-state tuition as the response and the other variables as the predictors, perform forward stepwise selection on the training set in order to identify a satisfactory model that uses just a subset of the predictors.\item[ii. ] Fit a GAM on the training data, using out-of-state tuition as the response and the features selected in the previous step as the predictors. Plot the results, and explain your findings.\item[iii. ] Evaluate the model obtained on the test set, and explain the results obtained.\item[iv. ] For which variables, if any, is there evidence of a non-linear relationship with the response?
+\end{itemize}
+\\
+
+\noindent
+{\bf Problem 3.} Let $X_1,\,\dots,\,X_n\sim f$ and let $\widehat{f}_n$ be the kernel density estimator using the boxcar kernel: 
+$$K(x)=\begin{cases}
+1 & \quad -\frac{1}{2}<x<\frac{1}{2}\\
+0 & \quad \text{otherwise.} 
+\end{cases}$$
+\begin{itemize}
+\item[i) ] Show that $$E\left[ \widehat{f}_n(x)\right]=\frac{1}{h}\int_{x-h/2}^{x+h/2}\,f(y)\,dy$$
+and 
+$$\text{Var}\left[\widehat{f}_n(x)\right]=\dfrac{1}{n\,h^2}\left[\int_{x-h/2}^{x+h/2}\,f(y)\,dy-\left( \int_{x-h/2}^{x+h/2}\,f(y)\,dy\right)^2 \right]\,.$$
+\item[ii) ] Show that if $h\rightarrow 0$ and $n\,h\rightarrow \infty$ as $n\rightarrow \infty$ then $\widehat{f}_n(x)\xrightarrow{P} f(x)$. 
+\end{itemize}
+
+\noindent
+{\bf Problem 4.} Data on the salaries of the chief executive officer of 60 companies are available on the course page in D2L. 
+Investigate the distribution of salaries using a histogram and a kernel density estimator. Use least squares cross-validation to choose the amount of smoothing. Also consider the Normal reference rule for picking a bandwidth for the kernel. There appear to be a few bumps in the density. Are they real? Use confidence bands to address this question. Finally, try using various kernel shapes and comment on the resulting estimates. 
+\end{document} 

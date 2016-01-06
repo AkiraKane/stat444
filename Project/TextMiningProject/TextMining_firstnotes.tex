@@ -1,0 +1,123 @@
+\documentclass[11pt]{report}
+\setlength{\textheight}{9.1in}
+\setlength{\textwidth}{7.1in}
+\setlength{\topmargin}{-1.1in} %{-.45in}
+\setlength{\oddsidemargin}{-.18in}
+\usepackage{amssymb,amsmath,cancel,listings,tikz,parskip}         % math package
+\renewcommand{\baselinestretch}{1.2} 
+\newcommand{\bfmath}[1]{\mbox{\boldmath$#1$\unboldmath}}
+\begin{document}
+\begin{center}
+{\bf STAT444/844/CM464/764 ~~~ W2015 ~~~Instructor: S. Chenouri}
+
+{\bf Project Group:} Christopher Alert: 20370849, Doreen Huang:  , Jonathan Tang: , Nikita Vikhliaev:  : 
+{\bf Undergraduate students} ~~~ {\bf\underline Due: April 6, 2015}\\
+\end{center} 
+\noindent
+
+\noindent
+\begin{center}
+Paper chosen: {\bf Featurizing Text: Converting Text into Predictors for Regression Analysis by D.Foster,M. Liberman and R.Stine}
+\end{center}
+
+\section* { Summary} 
+
+The paper explains one methodology for modeling unstructured bodies of text and algorithmically (with minimal user input) converting them into numerical features that are suitable for regression analysis. A few techniques are proposed, including: using raw word counts, obtaining principal components from the counts or building regressors from counts of adjacent words. The main aim is to demonstrate the relative ease with which text can be converted into numerical covariates for regression.
+
+In this paper, the authors give the example of mining the text in real estate listings from trulia.com to create explanatory variables that could be used in a regression model to predict Chicago real estate prices.
+
+In this review, a glossary with precise definitions of terms used in the paper is provided.
+
+\section* { Approaches to Text Analysis}
+\begin{itemize}
+
+\item [i] {\bf Substantive analysis:} methods like sentiment analysis that determine positive and negative words related to a particular subject domain 
+\begin{itemize}
+\item [-] This requires an extensive knowledge of the context and the results are known to be domain specific
+\item [-] This method also requires human effort to account for domain specific nuances
+\end{itemize}
+\item [ii] {\bf Supervised sentiment analysis:} converts words in text into numerical predictors. Methods used are drawn from "vector-space models". 
+\begin{itemize}
+\item [-] These models map words/symbols into points in a vectorspace defined by frequency counts. For example, latent sentiment analysis (LSA) uses singular value decompositions of featurized versions of different representations of the text
+\item [-] These methods also require little human intervention
+\end{itemize}
+\end{itemize}
+{\bf Note:} the use of principal components analysis (PCA) results in uninterpretable covariates. However, the method emphasizes predictive accuracy over interpretability.
+
+\section { Featurizing Algorithm} 
+
+The algorithm proposed followed a three step process:
+\begin{itemize}
+\item [1] Tokenization: (see glossary)
+\item [2] Computing matrices with: a) counts of the number of times word types appear within each document and  b) counts of the number of times that word types are found adjacent to each other
+\item [3] Computing truncated singular value decompositions (SVD) of the resulting matrices of counts with leading singular vectors as the ultimate regressors
+\end{itemize}
+
+\subsection{Tokenization}
+
+Tokenization as described in the paper takes a bag of words approach whereby no attempt is made to account for context. All text is converted to lower case and there is no distinction in treatment of words and punctuation. References are provided for further, more advanced initial processing. However, this is not the focus of this paper so the simple method is used.
+
+\subsection{Computing the Word and Bigram matrices}
+
+Words are judged to be similar if they appear in the same context. The word matrix, W, measures context as occurrence within a document. This ignores placement of words but somewhat captures semantic similarity. In contrast, the bigram matrix, B, defines context by adjacency. This approach places greater emphasis on local syntax.
+
+The SVD of each of these matrices is used to generate a set of explanatory variables. The leading $k$ singular vectors are taken as regressors.$k$ is a user-controlled tuning parameter and generally, $k_W = k_B$. Some advice is given for choosing $k$.
+
+\section* { Notation}
+
+The following notation is used in the paper: 
+\begin{itemize}
+\item [-] $\mathbf{W}$: the document/word matrix, of dimension $\mathbf{n} \times \mathbf{M}$
+\item [-] $\mathbf{B}$: the bigram matrix, of dimension $\mathbf{M} \times \mathbf{M}$
+\item [-] $\mathbf{B}_{ij}$: counts how often the word-type i precedes word-type j within the corpus
+\item [-] $\mathbf{V}$: a vocabulary
+\item [-] $\mathbf{M}$: number of unique word types
+\item [-] $\mathbf{w}_i$: vector holding the counts of each word type for the $\mathbf{i}$th document
+\item [-] $\mathbf{w}_{im}$: the number of times word type $\mathbf{m}$ appears within  the $\mathbf{i}$th document
+\item [-] $\mathbf{n}$: number of documents (observations)
+\item [-] $\mathbf{m}_i$: number of word tokens that appear in the description of the $\mathbf{i}$th property, $\mathbf{m}_i = \sum_{m}\mathbf{w}_{im} $
+\item [-] {\bf ($<$UNK$>$)}: word token used to represent occurrences of rare words
+\item [-] $\mathbf{y} = (y_1,\dots,y_n)^{T} $: column vector that hold the response to be modeled by regression analysis
+\item [-] $\mathbf{K}$: the true number of traits of documents that influence the response
+\item [-] {\bf $\mathbf{\beta}$}: coefficients which determine how the traits influence the response, $\mathbf{P}_k \sim Dir(\mathbf{M, \alpha_M})$
+\item [-] $\mathbf{P}_k$: distribution of word types used when describing trait k , particularly, $\mathbf{P}_{km}$ is the probability of using word type m when describing trait k
+\item [-] $\mathbf{N}$: total number of observed words, $\sum\,\mathbf{m}_i$
+
+%$$\begin{equation}
+%     y=\begin{bmatrix}
+%         y_1 &   y_2 & \dots & y_n
+%        \end{bmatrix}^{T}
+%  \end{equation}
+%  \begin{equation}
+%     A=\begin{bmatrix}
+%         X_{t_{k}} \\
+%         Y_{t_{k}} \\
+%         \dot{X}_{t_{k}}\\
+%         \dot{Y}_{t_{k}}
+%        \end{bmatrix}
+%  \end{equation} $$
+
+\end{itemize}
+
+\section* { Glossary}
+\begin{itemize}
+\item [-] {\bf word type:} a unique sequence of non-blank characters
+\item [-] {\bf word token:} an instance of a word type- roughly a sequence of characters delimited by white space
+\item [-] {\bf rare words:} word tokens observed in only one or two documents
+\item [-] {\bf tokenization:} converting the source text into word tokens
+\item [-] {\bf document/word matrix, W:} holds the counts of which word tokens appear in the same document, ignoring ordering or appearance
+\item [-] {\bf bag of words:} a multiset that does not distinguish placement of words
+\item [-] {\bf bigram matrix, B:} holds the counts of how often word tokens appear adjacent to each other
+\item [-] {\bf latent semantic analysis:}the representation of text using leading singular vectors from the SVD of the word matrix
+\item [-] {\bf eigenwords:} singular vectors of B which form directions in word space
+\item [-] {\bf document:} the description found in a listing
+\item [-] {\bf corpus:} the set of all documents
+\item [-] {\bf topic modeling:} an unsupervised technique that clusters documents based on the presence of shared, underlying "topics" revealed by a hierarchical Bayesian model
+\item [-] {\bf trait:} a feature of documents that influences the response and defines a probability distribution over the word types in the vocabulary V
+\item [-] {\bf n-gram:}
+\item [-] {\bf transfer learning:} learning what can be extrapolated from one situation to another, for example, from real estate prices in Chicago, June 2013 to later years or different cities
+
+\end{itemize}
+\end{document}
+
+

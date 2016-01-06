@@ -1,0 +1,157 @@
+\documentclass[11pt]{report}
+\setlength{\textheight}{9.1in}
+\setlength{\textwidth}{7.1in}
+\setlength{\topmargin}{-1.1in} %{-.45in}
+\setlength{\oddsidemargin}{-.18in}
+\usepackage{amssymb,amsmath} 	% math package
+\renewcommand{\baselinestretch}{1.2} 
+\newcommand{\bfmath}[1]{\mbox{\boldmath$#1$\unboldmath}}
+\begin{document}
+\begin{center}
+{\bf STAT444/844/CM464/764 ~~~ Assignment \# 2 ~~Winter 2015 ~~Instructor: S. Chenouri}
+\end{center} 
+\noindent
+{\bf \underline {Due}: March 4, 2013}\\
+
+\noindent
+{\bf Instruction: Both graduate and undergraduate student must clearly mention on their submitted solution their level: ``Graduate student" or ``Undergraduate student". You must typeset your solution using {\tt Latex}. A  {\tt Latex} template can be find in D2L. Be clear in your solutions and make sure to explain your findings.} \\
+\vspace{1mm}
+
+\noindent
+{\bf Problem 1. (From JWHT)}   Run the following commands in {\tt R} to call the Boston housing data available in the {\tt R} package {\tt MASS}
+\begin{verbatim}
+> library(MASS)
+> Boston
+\end{verbatim}
+The {\tt Boston} Housing data set includes 506 census tracts of Boston from the 1970 census. The following variables are recorded in this data set.
+
+\begin{tabular}{rl}
+crim =&per capita crime rate by town\\
+zn =&proportion of residential land zoned for lots over 25,000 sq.ft\\
+indus =&proportion of non-retail business acres per town\\
+chas = &Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)\\
+nox = &nitric oxides concentration (parts per 10 million)\\
+rm =&average number of rooms per dwelling\\
+age =&proportion of owner-occupied units built prior to 1940\\
+dis =&weighted distances to five Boston employment centres\\
+rad =&index of accessibility to radial highways\\
+tax =&full-value property-tax rate per USD 10,000\\
+ptratio =&pupil-teacher ratio by town\\
+b =&$1000\,(\text{B} - 0.63)^2$ where B is the proportion of blacks by town\\
+lstat = &percentage of lower status of the population\\
+medv =&median value of owner-occupied homes in USD 1000's \\\end{tabular}
+\begin{itemize}
+\item[(a) ] Consider {\tt crim} as a response variable and the others as predictors. Answer the following questions
+\begin{itemize}
+\item[i. ] For each predictor, fit a simple linear regression model to predict the response. Describe your results. In which of the models is there a statistically significant association between the predictor and the response? Create some plots to back up your assertions. 
+\item[ii. ] Fit a multiple linear regression model to predict the response using all of the predictors. Describe your results. For which predictors can we reject the null hypothesis $H_0\,:\, \beta_j=0$?
+\item[iii. ]  How do your results from i. compare to your results from ii.? Create a plot displaying the univariate regression coefficients from i. on the $x$-axis, and the multiple regression coefficients from ii. on the $y$-axis. That is, each predictor is displayed as a single point in the plot. Its coefficient in a simple linear regression model is shown on the $x$-axis, and its coefficient estimate in the multiple linear regression model is shown on the $y$-axis.
+\item[iv. ] Is there evidence of non-linear association between any of the predictors and the response? To answer this question, for each predictor X, fit a model of the form
+$$Y=\beta_0+\beta_1\,X+\beta_2\,X^2+\beta_3\,X^3+\epsilon\,.$$
+\end{itemize}
+\item[(b) ] Consider {\tt medv} (median house value) as a response variable and the others as predictors. Repeat parts i. to iv. in (a). \end{itemize}
+
+\noindent
+{\bf Problem 2. (Overfitting and underfitting)} Variable selection is important for regression since there are problems in either using too many (irrelevant) or too few (omitted) variables in a regression model. Consider the linear regression model $y_i=\bfmath{\beta}^T\mathbf{x}_i+\epsilon_i$, where the vector of covariates (input vector) is $\mathbf{x}_i=(x_{i\,1},\dots,\,x_{i\,p})^T\in\mathbb{R}^p$ and the errors are independent and identically distributed (i.i.d.) satisfying $E(\epsilon_i)=0$ and $\text{Var}(\epsilon_i)=\sigma^2$. Let $\mathbf{y}=(y_1,\,\dots,\,y_n)^T$ be the response vector and $\mathbf{X}=(x_{i\,j}; i=1\dots n, \,j=1,\dots p)$ be the design matrix. 
+
+\noindent
+Assume that only the first $p_{_0}$ variables are important. Let $\mathcal{A} =\lbrace 1,\dots,\,p\rbrace$ be the index set for the full model and $\mathcal{A}_0=\lbrace 1,\dots, p_{_0}\rbrace$ be the index set for the true model. The
+true regression coefficients can be denoted as $\bfmath{\beta}^\ast= (\bfmath{\beta}^{\ast\, T}_{_{\mathcal{A}_0}},\,\mathbf{0}^T)^T$. Now consider three
+different modelling strategies: 
+\begin{itemize}
+\item[] {\it Strategy I:} Fit the full model. Denote the full design matrix as $\mathbf{X}_{_\mathcal{A}}$ and the corresponding OLS estimator by $\widehat{\bfmath{\beta}}^{ols}_{_\mathcal{A}}$. 
+\item[] {\it Strategy II:} Fit the true model using the first $p_{_0}$ covariates. Denote the corresponding design matrix by $\mathbf{X}_{_{\mathcal{A}_0}}$ and the OLS estimator by $\widehat{\bfmath{\beta}}^{ols}_{_{\mathcal{A}_0}}$.
+\item[] {\it Strategy III:} Fit a subset model using only the first $p_{_1}$ covariates for some $p_{_1}<p_{_0}$. Denote the corresponding design matrix by $\mathbf{X}_{\mathcal{A}_1}$ and the OLS estimator by $\widehat{\bfmath{\beta}}^{ols}_{_{\mathcal{A}_1}}$.  
+\end{itemize}
+\begin{enumerate}
+\item[1. ] One possible consequence of including irrelevant variables in a regression model is that the predictions are not efficient (i.e., have larger variances) though they are unbiased. For any $\mathbf{x}\in\mathbb{R}^p$, show that
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)=\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}}\mathbf{x}_{_{\mathcal{A}_0}}\,,\quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)\geq \text{Var}(\widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_0}}\mathbf{x}_{_{\mathcal{A}_0}})\,,$$
+where $\mathbf{x}_{_{\mathcal{A}_0}}$ consists of the first $p_{_0}$ elements of $\mathbf{x}$.   
+\item[2. ] One consequence of excluding important variables in a linear model is that the predictions are biased, though they have smaller variances. For any $\mathbf{x}\in\mathbb{R}^p$, show that
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_1}}\mathbf{x}_{_{\mathcal{A}_1}}\,\right)\neq\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}}\mathbf{x}_{_{\mathcal{A}_0}}\,,\quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_1}}\mathbf{x}_{_{\mathcal{A}_1}}\,\right)\leq \text{Var}(\widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_0}}\mathbf{x}_{_{\mathcal{A}_0}})\,,$$
+where $\mathbf{x}_{_{\mathcal{A}_1}}$ consists of the first $p_{_1}$ elements of $\mathbf{x}$.
+\end{enumerate}
+\noindent
+
+\noindent 
+{\bf Problem 3. } In an enzyme kinetics study the velocity of a reaction ($Y$) is expected to be related to the concentration ($X$) as follows  
+$$Y_i=\frac{\beta_0 \,x_i}{\beta_1+x_i}+\epsilon_i\,.$$
+The dataset ``{\tt Enzyme.txt}" posted on D2L contains eighteen data points related to this study. 
+\begin{itemize}
+\item[i) ] To obtain starting values for $\beta_0$ and $\beta_1$, observe that when the error term is ignored we have $Y'_i=\alpha_0+\alpha_1\,x'_i$, where $Y'_i=1/Y_i$, $\alpha_0=1/\beta_0$, $\alpha_1=\beta_1/\beta_0$, and $x'_i=1/x_i$. Fit a linear regression function to the transformed data to obtain initial estimates for $\beta_0$ and $\beta_1$ used in {\tt nls}. 
+\item[ii) ] Using the starting values obtained in part (i), find the least squares estimates of the parameters $\beta_0$ and $\beta_1$ 
+\item[iii) ] Plot the estimated nonlinear regression over the scatter plot of the data. Does the fit appear to be adequate?
+\item[iv) ] Obtain the residuals and plot them against the fitted values and against $X$ on separate graphs. Also obtain a normal probability plot. What do your plots show? 
+\item[v) ] Given that only 18 trials can be made, what are some advantages and disadvantages of considering fewer concentration levels but with some replications, as compared to considering 18 different concentration levels as was done here?
+\item[vi) ] Assume that the fitted model is appropriate and that large-sample inferences can be employed here. 
+\begin{itemize}
+\item[(1) ] Obtain an approximate 95 percent confidence interval for $\beta_0$.
+\item[(2) ] Test whether or not $\beta_1=20$; use $\alpha=0.05$. State the alternatives, decision rule, and conclusion.  
+\end{itemize}
+\end{itemize}
+
+\noindent
+{\bf Problem 4. (From JWHT)} Suppose we estimate the regression coefficients in  a linear regression model by minimizing
+$$\sum\limits_{i=1}^n \left( y_i-\beta_0-\sum\limits_{j=1}^p\beta_j\,x_{i\,j}\right)^2+\lambda\,\sum\limits_{j=1}^p\beta_j^2$$
+for a particular value of $\lambda$. For parts (a) to (e), indicate which of i. to v. is correct. Justify your answer. 
+\begin{itemize}
+\item[(a) ] As we increase $\lambda$ from 0, the training {\tt RSS} will. 
+\begin{itemize}
+\item[i. ] Increase initially, and then eventually start decreasing in an inverted U shape.  
+\item[ii. ] Decrease initially, and then eventually start increasing in a U shape. 
+\item[iii. ] Steadily increase.
+\item[iv. ] Steadily decrease. 
+\item[v. ] Remain constant.  
+\end{itemize}
+\item[(b) ] Repeat (a) for test {\tt RSS}.
+\item[(c) ] Repeat (a) for {\tt variance}.
+\item[(d) ] Repeat (a) for {\tt squared bias}.
+\end{itemize}
+
+\noindent
+{\bf Problem 5. (From JWHT)} I this problem, we perform cross-validation on a simulated data set. 
+\begin{itemize}
+\item[(a) ] Generate a simulated data set as follows
+\begin{verbatim}
+> set.seed(1)
+> e=rnorm(100)
+> x=rnorm(100)
+> y=x-2*x^2+e
+\end{verbatim}
+In this data set, what is $n$ and what is $p$? Write out the model used to generate the data in equation form.
+\item[(b) ] Create a scatterplot of $X$ against $Y$. Comment on what you find.
+\item[(c) ] Set a random seed, and then compute the LOOCV errors that result from fitting the following four models using least squares:
+\begin{itemize}
+\item[i. ] $Y=\beta_0+\beta_1X+\epsilon$
+\item[ii. ] $Y=\beta_0+\beta_1\,X+\beta_2\,X^2+\epsilon$
+\item[iii. ] $Y=\beta_0+\beta_1\,X+\beta_2\,X^2+\beta_3\,X^3+\epsilon$
+\item[iv. ] $Y=\beta_0+\beta_1\,X+\beta_2\,X^2+\beta_3\,X^3+\beta_4\,X^4+\epsilon$
+\end{itemize}
+note you may find it helpful to use the {\tt data.frame()} function to create a single data set containing both $X$ and $Y$. 
+\item[(d) ] Repeat (c) using another random seed, and report your results. Are your results the same as what you got in (c)? Why?
+\item[(e) ] Which of the models in (c) had the smallest LOOCV error? Is this what you expected? Explain your answer.
+\item[(f) ] Comment on the statistical significance of the coefficient estimates that results from fitting each of the models in (c) using least squares. Do these results agree with the conclusions drawn based on the cross-validation results? 
+\end{itemize}
+
+\noindent
+{\bf Problem 6. (From JWHT) (Graduate Students Only)} As the number of predictors (features) used in a model increases, the training error will necessarily decrease, but the test error may not. We will now explore this in a simulated data set.
+\begin{itemize}
+\item[(a) ] Generate a data set with $p = 20$ features, $n = 1,000$ observations, and an associated quantitative response vector generated according to the model
+$$\mathbf{y}=\mathbf{X}\,\bfmath{\beta}+\bfmath{\epsilon}\,,$$
+where $\bfmath{\beta}$ has some elements that are exactly equal to zero. 
+\item[(b) ] Split your data set into a training set containing 100 observations and a test set containing 900 observations.
+\item[(c) ] Perform best subset selection on the training set, and plot the training set MSE associated with the best model of each size.
+\item[(d) ] Plot the test set MSE associated with the best model of each size.
+\item[(e) ] For which model size does the test set MSE take on its minimum value? Comment on your results. If it takes on its minimum value for a model containing only an intercept or a model containing all of the features, then play around with the way that you are generating the data in (a) until you come up with a scenario in which the test set MSE is minimized for an intermediate model size.
+\item[(f) ] How does the model at which the test set MSE is minimized compare to the true model used to generate the data? Comment on the coefficient values.
+\item[(g) ] Create a plot displaying $\sqrt{\sum\limits_{j=1}^p(\beta_j-\widehat{\beta}_j^r)^2}$ for a range of values of $r$, where $\widehat{\beta}_j^r$ is the $j^\text{th}$ coefficient estimate for the best model containing $r$ coefficients. Comment on what you observe. How does this compare to the test MSE plot from (d)?
+\end{itemize}
+
+\noindent
+{\bf Problem 7. (From JWHT)} Recall the Boston housing data set from Problem 1. Suppose we try to predict the response variable {\tt crim} (per capita crime rate) based on the other variables in the Boston data set.
+\begin{itemize}
+\item[(a) ] Try out some of the regression methods explored in this course, such as best subset selection, forward selection, backward elimination, ridge regression, and the lasso. Present and discuss results for the approaches that you consider.
+\item[(b) ] Propose a model (or set of models) that seem to perform well on this data set, and justify your answer. Make sure that you are evaluating model performance using validation set error, cross- validation, or some other reasonable alternative, as opposed to using training error.
+\item[(c) ] Does your chosen model involve all of the features in the data set? Why or why not?
+\end{itemize}
+\end{document} 

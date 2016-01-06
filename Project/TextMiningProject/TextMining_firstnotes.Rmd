@@ -1,0 +1,27 @@
+\documentclass[11pt]{report}
+\setlength{\textheight}{9.1in}
+\setlength{\textwidth}{7.1in}
+\setlength{\topmargin}{-1.1in} %{-.45in}
+\setlength{\oddsidemargin}{-.18in}
+\usepackage{amssymb,amsmath,cancel,listings,tikz,parskip}         % math package
+\renewcommand{\baselinestretch}{1.2} 
+\newcommand{\bfmath}[1]{\mbox{\boldmath$#1$\unboldmath}}
+\begin{document}
+\begin{center}
+{\bf STAT444/844/CM464/764 ~~~ Assignment \# 2 ~~Winter 2015 ~~Instructor: S. Chenouri}
+{\bf Group: Christopher Alert: 20370849, Dooreen Huang:  , Jonathan Tang: , Nikita Vikhliaev:  : Undergraduate student}
+\end{center} 
+\noindent
+{\bf \underline {Due}: April 6, 2015}\\
+
+
+\noindent
+\begin{center}
+\bold{Article chosen:} Featurizing Text: Converting Text into Predictors for Regression Analysis by D.Foster,M. Liberman and R.Stine
+\end{center}
+
+\bold{Summary}
+
+The paper expalins one methodology for modeling unstructured bodies of text and algorithmically (with minimal user input) converting them into numerical features that are suitable for regression analysis. A few techniques are proposed, including: using raw word counts, obtaining principal components from the counts or building regressors from counts of adjacent words.
+
+\end{document}

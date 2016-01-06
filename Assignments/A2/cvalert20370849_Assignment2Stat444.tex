@@ -1,0 +1,1735 @@
+\documentclass[11pt]{report}
+\setlength{\textheight}{9.1in}
+\setlength{\textwidth}{7.1in}
+\setlength{\topmargin}{-1.1in} %{-.45in}
+\setlength{\oddsidemargin}{-.18in}
+\usepackage{amssymb,amsmath,cancel,listings,tikz,parskip} 	% math package
+\renewcommand{\baselinestretch}{1.2} 
+\newcommand{\bfmath}[1]{\mbox{\boldmath$#1$\unboldmath}}
+\begin{document}
+\begin{center}
+{\bf STAT444/844/CM464/764 ~~~ Assignment \# 2 ~~Winter 2015 ~~Instructor: S. Chenouri}
+{\bf Student: Christopher Alert : Undergraduate student}
+\end{center} 
+\noindent
+{\bf \underline {Due}: March 4, 2015}\\
+
+\noindent
+{\bf Problem 1. (From JWHT)}   Run the following commands in {\tt R} to call the Boston housing data available in the {\tt R} package {\tt MASS}
+\begin{verbatim}
+> library(MASS)
+> Boston
+\end{verbatim}
+The {\tt Boston} Housing data set includes 506 census tracts of Boston from the 1970 census. The following variables are recorded in this data set.
+
+\begin{tabular}{rl}
+crim =&per capita crime rate by town\\
+zn =&proportion of residential land zoned for lots over 25,000 sq.ft\\
+indus =&proportion of non-retail business acres per town\\
+chas = &Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)\\
+nox = &nitric oxides concentration (parts per 10 million)\\
+rm =&average number of rooms per dwelling\\
+age =&proportion of owner-occupied units built prior to 1940\\
+dis =&weighted distances to five Boston employment centres\\
+rad =&index of accessibility to radial highways\\
+tax =&full-value property-tax rate per USD 10,000\\
+ptratio =&pupil-teacher ratio by town\\
+b =&$1000\,(\text{B} - 0.63)^2$ where B is the proportion of blacks by town\\
+lstat = &percentage of lower status of the population\\
+medv =&median value of owner-occupied homes in USD 1000's \\\end{tabular}
+\begin{itemize}
+\item[(a) ] Consider {\tt crim} as a response variable and the others as predictors. Answer the following questions
+\begin{itemize}
+\item[i. ] For each predictor, fit a simple linear regression model to predict the response. Describe your results. In which of the models is there a statistically significant association between the predictor and the response? Create some plots to back up your assertions. 
+
+\begin{lstlisting}[language=R]
+
+library(MASS)
+par(mfrow=c(1,2))
+summary(Boston) ; attach(Boston) 
+# Univariate models
+
+znmod <- lm(crim~zn,data=Boston)
+summary(znmod) ; anova(znmod) 
+plot(y=crim,x=zn) 
+abline(znmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(znmod$resid)   
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot1.png}
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+indusmod <- lm(crim~indus,data=Boston)
+summary(indusmod) ; anova(indusmod) 
+plot(y=crim,x=indus) 
+abline(indusmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(indusmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot3.png}
+
+
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+
+chasmod <- lm(crim~chas,data=Boston)
+summary(chasmod) ; anova(chasmod) # Insignificant
+plot(y=crim,x=chas) 
+abline(chasmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(chasmod$resid) 
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot5.png}
+
+
+
+\item[-] Insignificant fit. The crime rate changes completely independently of the chas dummy variable
+
+\begin{lstlisting}[language=R]
+noxmod <- lm(crim~nox,data=Boston)
+summary(noxmod) ; anova(noxmod) 
+plot(y=crim,x=nox) 
+abline(noxmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(noxmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot7.png}
+
+
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+rmmod <- lm(crim~rm,data=Boston)
+summary(rmmod) ; anova(rmmod) 
+plot(y=crim,x=rm) 
+abline(rmmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(rmmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot9.png}
+
+
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+agemod <- lm(crim~age,data=Boston)
+summary(agemod) ; anova(agemod) 
+plot(y=crim,x=age) 
+abline(agemod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(agemod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot11.png}
+
+
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+dismod <- lm(crim~dis,data=Boston)
+summary(dismod) ; anova(dismod) 
+plot(y=crim,x=dis) 
+abline(dismod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(dismod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot13.png}
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+radmod <- lm(crim~rad,data=Boston)
+summary(radmod) ; anova(radmod) 
+plot(y=crim,x=rad) 
+abline(radmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(radmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot15.png}
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+taxmod <- lm(crim~tax,data=Boston)
+summary(taxmod) ; anova(taxmod) 
+plot(y=crim,x=tax) 
+abline(taxmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(taxmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot17.png}
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+ptratiomod <- lm(crim~ptratio,data=Boston)
+summary(ptratiomod) ; anova(ptratiomod) 
+plot(y=crim,x=ptratio) 
+abline(ptratiomod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(ptratiomod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot19.png}
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+bmod <- lm(crim~black,data=Boston)
+summary(bmod) ; anova(bmod) 
+plot(y=crim,x=black) 
+abline(bmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(bmod$resid)
+\end{lstlisting}
+
+\includegraphics[scale=0.4]{plot21.png}
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+lstatmod <- lm(crim~lstat,data=Boston)
+summary(lstatmod) ; anova(lstatmod) 
+plot(y=crim,x=lstat) 
+abline(lstatmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(lstatmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot23.png}
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+medvmod <- lm(crim~medv,data=Boston)
+summary(medvmod) ; anova(medvmod) 
+plot(y=crim,x=medv) 
+abline(medvmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(medvmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot25.png}
+
+\item[-] Significant fit
+\item[ii. ] Fit a multiple linear regression model to predict the response using all of the predictors. Describe your results. For which predictors can we reject the null hypothesis $H_0\,:\, \beta_j=0$?
+
+\begin{lstlisting}[language=R]
+# Multiple Regression model
+multimod <- lm(crim~.,data=Boston)
+summary(multimod)
+\end{lstlisting}
+
+\includegraphics[scale=0.4]{multimodsummary.png}
+
+The variables chas, rm, age, nox, tax, lstat and ptratio were all not statistically significant in the multiple regression model. Of these, chas was the only variable initially insignificant when fit alone against crime.  This means we could reject $H_{0}:\beta_1=0$ that $\beta_j=0$ for each predictor $\forall j \in {zn,indus,dis,rad,black,medv}$. Of the significant variables, zn and rad are positively correlated with crime while indus, dis, black and medv were negatively correlated with crime.
+
+\item[iii. ]  How do your results from i. compare to your results from ii.? Create a plot displaying the univariate regression coefficients from i. on the $x$-axis, and the multiple regression coefficients from ii. on the $y$-axis. That is, each predictor is displayed as a single point in the plot. Its coefficient in a simple linear regression model is shown on the $x$-axis, and its coefficient estimate in the multiple linear regression model is shown on the $y$-axis.
+
+\begin{lstlisting}[language=R]
+beta.uni <- c(znmod$coefficients[-1],indusmod$coefficients[-1],chasmod$coefficients[-1],
+              noxmod$coefficients[-1],rmmod$coefficients[-1],agemod$coefficients[-1],
+              dismod$coefficients[-1],radmod$coefficients[-1],taxmod$coefficients[-1],
+              ptratiomod$coefficients[-1],bmod$coefficients[-1],lstatmod$coefficients[-1],
+              medvmod$coefficients[-1])
+beta.multi <- multimod$coefficients[-1] 
+predictors <- c("zn","indus","chas","nox","rm","age","dis","rad","tax","ptratio","b",
+                "lstat","medv")
+par(mfrow=c(1,2))
+plot(x=beta.uni,y=beta.multi)
+plot(x=beta.uni[-4],y=beta.multi[-4],xlab="Univariate regression Betas without nox",ylab="Multiple regresion Betas without nox")
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot27.png}
+Most coefficients looked more or less the same
+
+\item[iv. ] Is there evidence of non-linear association between any of the predictors and the response? To answer this question, for each predictor X, fit a model of the form
+$$Y=\beta_0+\beta_1\,X+\beta_2\,X^2+\beta_3\,X^3+\epsilon\,.$$
+\end{itemize}
+
+\begin{lstlisting}[language=R]
+# NonLinear fits
+par(mfrow=c(1,1))
+Boston3 <- data.frame(Boston,Boston^2,Boston^3)
+znmod <- lm(crim~zn+zn.1+zn.2,data=Boston3)
+summary(znmod)  
+plot(znmod$resid)   
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot28.png}
+\item[-] Significant linear term only
+
+\begin{lstlisting}[language=R]
+indusmod <- lm(crim~indus+indus.1+indus.2,data=Boston3)
+summary(indusmod) #
+plot(indusmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot29.png}
+
+\item[-] Significant linear, quadratic and cubic terms
+\begin{lstlisting}[language=R]
+chasmod <- lm(crim~chas+chas.1+chas.2,data=Boston3)
+summary(chasmod) # Insignificant
+plot(chasmod$resid) # 
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot30.png}
+
+\item[-] The crime rate changes completely independently of the chas dummy variable
+\begin{lstlisting}[language=R]
+noxmod <- lm(crim~nox+nox.1+nox.2,data=Boston3)
+summary(noxmod) # Significant linear, quadratic and cubic terms
+plot(noxmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot31.png}
+
+\item[-] Significant linear, quadratic and cubic terms
+
+\begin{lstlisting}[language=R]
+rmmod <- lm(crim~rm+rm.1+rm.2,data=Boston3)
+summary(rmmod) # Insignificant in al three terms
+plot(rmmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot32.png}
+
+\item[-] Insignificant in all three terms
+
+\begin{lstlisting}[language=R]
+agemod <- lm(crim~age+age.1+age.2,data=Boston3)
+summary(agemod) #Significant quadratic and cubic terms
+plot(agemod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot33.png}
+
+\item[-] Significant quadratic and cubic terms
+
+
+\begin{lstlisting}[language=R]
+dismod <- lm(crim~dis+dis.1+dis.2,data=Boston3)
+summary(dismod) # Significant quadratic and cubic terms
+plot(dismod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot34.png}
+
+\item[-] Significant quadratic and cubic terms
+
+
+\begin{lstlisting}[language=R]
+radmod <- lm(crim~rad+rad.1+rad.2,data=Boston3)
+summary(radmod) # None of the terms are significant
+plot(radmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot35.png}
+
+\item[-] None of the terms are significant
+
+\begin{lstlisting}[language=R]
+taxmod <- lm(crim~tax+tax.1+tax.2,data=Boston3)
+summary(taxmod) # None of the terms are significant
+plot(taxmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot36.png}
+
+\item[-] None of the terms are significant
+
+\begin{lstlisting}[language=R]
+ptratiomod <- lm(crim~ptratio+ptratio.1+ptratio.2,data=Boston3)
+summary(ptratiomod) # Significant linear, quadratic and cubic trms
+plot(ptratiomod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot37.png}
+
+\item[-] Significant linear, quadratic and cubic terms
+
+\begin{lstlisting}[language=R]
+bmod <- lm(crim~black+black.1+black.2,data=Boston3)
+summary(bmod) # No non-linear relationship of significance
+plot(bmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot38.png}
+
+\item[-] No non-linear relationship of significance
+
+\begin{lstlisting}[language=R]
+lstatmod <- lm(crim~lstat+lstat.1+lstat.2,data=Boston3)
+summary(lstatmod) # No non linar relationship of significance
+plot(lstatmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot39.png}
+
+\item[-] No non linear relationship of significance
+
+\begin{lstlisting}[language=R]
+medvmod <- lm(crim~medv+medv.1+medv.2,data=Boston3)
+summary(medvmod) # Significant in linear, quadratic and cubic terms
+plot(medvmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot40.png}
+\item[-] Significant in linear, quadratic and cubic terms
+
+
+\item[(b) ] Consider {\tt medv} (median house value) as a response variable and the others as predictors. Repeat parts i. to iv. in (a). \end{itemize}
+
+\begin{lstlisting}[language=R]
+# Univariate models
+znmod <- lm(medv~zn,data=Boston)
+summary(znmod) 
+plot(y=medv,x=zn) 
+abline(znmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(znmod$resid)   
+\end{lstlisting}
+
+\begin{itemize}
+\item[-] Significant fit
+
+
+\begin{lstlisting}[language=R]
+indusmod <- lm(medv~indus,data=Boston)
+summary(indusmod) 
+plot(y=medv,x=indus) 
+abline(indusmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(indusmod$resid)
+\end{lstlisting}
+
+\item[-] Significant fit
+
+
+
+\begin{lstlisting}[language=R]
+chasmod <- lm(medv~chas,data=Boston)
+summary(chasmod) 
+plot(y=medv,x=chas) 
+abline(chasmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(chasmod$resid) 
+\end{lstlisting}
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+noxmod <- lm(medv~nox,data=Boston)
+summary(noxmod) 
+plot(y=medv,x=nox) 
+abline(noxmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(noxmod$resid)
+\end{lstlisting}
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+rmmod <- lm(medv~rm,data=Boston)
+summary(rmmod) 
+plot(y=medv,x=rm) 
+abline(rmmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(rmmod$resid)
+\end{lstlisting}
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+agemod <- lm(medv~age,data=Boston)
+summary(agemod) 
+plot(y=medv,x=age) 
+abline(agemod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(agemod$resid)
+\end{lstlisting}
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+dismod <- lm(medv~dis,data=Boston)
+summary(dismod)
+plot(y=medv,x=dis) 
+abline(dismod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(dismod$resid)
+\end{lstlisting}
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+radmod <- lm(medv~rad,data=Boston)
+summary(radmod) 
+plot(y=medv,x=rad) 
+abline(radmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(radmod$resid)
+\end{lstlisting}
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+taxmod <- lm(medv~tax,data=Boston)
+summary(taxmod) 
+plot(y=medv,x=tax) 
+abline(taxmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(taxmod$resid)
+\end{lstlisting}
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+ptratiomod <- lm(medv~ptratio,data=Boston)
+summary(ptratiomod) 
+plot(y=medv,x=ptratio) 
+abline(ptratiomod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(ptratiomod$resid)
+\end{lstlisting}
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+bmod <- lm(medv~black,data=Boston)
+summary(bmod) 
+plot(y=medv,x=black) 
+abline(bmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(bmod$resid)
+\end{lstlisting}
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+lstatmod <- lm(medv~lstat,data=Boston)
+summary(lstatmod) 
+plot(y=medv,x=lstat) 
+abline(lstatmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(lstatmod$resid)
+\end{lstlisting}
+
+\item[-] Significant fit
+
+\begin{lstlisting}[language=R]
+crimmod <- lm(medv~crim,data=Boston)
+summary(crimmod) 
+plot(x=crim,y=medv) 
+abline(crimmod,col="blue",lty=2)
+legend("topleft",title="Plot Legend",
+       legend=c("OLS line"),
+       lty=c(2),
+       col=c("blue"),
+       cex=0.5)
+plot(crimmod$resid)
+\end{lstlisting}
+
+\item[-] Significant fit
+\end{itemize}
+
+\begin{lstlisting}[language=R]
+# 
+ple Regression model
+multimod <- lm(medv~.,data=Boston)
+summary(multimod)
+\end{lstlisting}
+\includegraphics[scale=0.4]{multimodsummary2.png}
+
+The variables indus and age were not statistically significant in the multiple regression model. This means we could reject H0 that Bj = 0 for every predictor except age and indus. Of the significant variables, zn,chas,rm,rad and black are positively correlated with the median value while crim, nox, dis, tax, ptratio and lstat were negatively correlated with medv.
+
+\begin{lstlisting}[language=R]
+beta.uni <- c(znmod$coefficients[-1],indusmod$coefficients[-1],chasmod$coefficients[-1],
+              noxmod$coefficients[-1],rmmod$coefficients[-1],agemod$coefficients[-1],
+              dismod$coefficients[-1],radmod$coefficients[-1],taxmod$coefficients[-1],
+              ptratiomod$coefficients[-1],bmod$coefficients[-1],lstatmod$coefficients[-1],
+              crimmod$coefficients[-1])
+beta.multi <- multimod$coefficients[-1] 
+predictors <- c("zn","indus","chas","nox","rm","age","dis","rad","tax","ptratio","b",
+                "lstat","medv")
+par(mfrow=c(1,2))
+plot(x=beta.uni,y=beta.multi)
+plot(x=beta.uni[-c(4,5)],y=beta.multi[-c(4,5)],xlab="Univariate regression Betas without nox and rm",ylab="Multiple regresion Betas without nox and rm")
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot67.png}
+\includegraphics[scale=0.4]{plot67i.png}
+Most coefficients looked more or less the same
+
+
+\begin{lstlisting}[language=R]
+# NonLinear fits
+par(mfrow=c(1,1))
+Boston3 <- data.frame(Boston,Boston^2,Boston^3)
+znmod <- lm(medv~zn+zn.1+zn.2,data=Boston3)
+summary(znmod)  
+plot(znmod$resid)   
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot68.png}
+\begin{itemize}
+\item[-] Significant in linear, quadratic and cubic terms
+
+\begin{lstlisting}[language=R]
+indusmod <- lm(medv~indus+indus.1+indus.2,data=Boston3)
+summary(indusmod) 
+plot(indusmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot69.png}
+\item[-] Significant linear, quadratic and cubic terms
+
+\begin{lstlisting}[language=R]
+chasmod <- lm(medv~chas+chas.1+chas.2,data=Boston3)
+summary(chasmod) 
+plot(chasmod$resid) 
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot70.png}
+\item[-] Significant linear term
+
+\begin{lstlisting}[language=R]
+noxmod <- lm(medv~nox+nox.1+nox.2,data=Boston3)
+summary(noxmod) # 
+plot(noxmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot71.png}
+\item[-] Significant cubic term
+
+\begin{lstlisting}[language=R]
+rmmod <- lm(medv~rm+rm.1+rm.2,data=Boston3)
+summary(rmmod) # 
+plot(rmmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot72.png}
+\item[-] Significant in linear, quadratic and cubic terms
+
+\begin{lstlisting}[language=R]
+agemod <- lm(medv~age+age.1+age.2,data=Boston3)
+summary(agemod) # 
+plot(agemod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot73.png}
+\item[-] Insignificant in all three terms
+
+\begin{lstlisting}[language=R]
+dismod <- lm(medv~dis+dis.1+dis.2,data=Boston3)
+summary(dismod) # 
+plot(dismod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot74.png}
+\item[-] Significant linear, quadratic and cubic terms
+
+\begin{lstlisting}[language=R]
+radmod <- lm(medv~rad+rad.1+rad.2,data=Boston3)
+summary(radmod) # 
+plot(radmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot75.png}
+\item[-] Significant in linear, quadratic and cubic terms
+
+\begin{lstlisting}[language=R]
+taxmod <- lm(medv~tax+tax.1+tax.2,data=Boston3)
+summary(taxmod) # 
+plot(taxmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot76.png}
+\item[-] None of the terms are significant
+
+\begin{lstlisting}[language=R]
+ptratiomod <- lm(medv~ptratio+ptratio.1+ptratio.2,data=Boston3)
+summary(ptratiomod) # 
+plot(ptratiomod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot77.png}
+\item[-] No non-linear relationsip of significance
+
+\begin{lstlisting}[language=R]
+bmod <- lm(medv~black+black.1+black.2,data=Boston3)
+summary(bmod) # 
+plot(bmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot78.png}
+\item[-] No non-linear relationship of significance
+
+\begin{lstlisting}[language=R]
+lstatmod <- lm(medv~lstat+lstat.1+lstat.2,data=Boston3)
+summary(lstatmod) # 
+plot(lstatmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot79.png}
+\item[-] Significant in linear, quadratic and cubic terms
+
+\begin{lstlisting}[language=R]
+crimmod <- lm(medv~crim+crim.1+crim.2,data=Boston3)
+summary(crimmod) 
+plot(crimmod$resid)
+\end{lstlisting}
+\includegraphics[scale=0.4]{plot80.png}
+\item[-] Significant in linear, quadratic and cubic terms
+\end{itemize}
+
+\newpage
+\noindent
+{\bf Problem 2. (Overfitting and underfitting)} Variable selection is important for regression since there are problems in either using too many (irrelevant) or too few (omitted) variables in a regression model. Consider the linear regression model $y_i=\bfmath{\beta}^T\mathbf{x}_i+\epsilon_i$, where the vector of covariates (input vector) is $\mathbf{x}_i=(x_{i\,1},\dots,\,x_{i\,p})^T\in\mathbb{R}^p$ and the errors are independent and identically distributed (i.i.d.) satisfying $E(\epsilon_i)=0$ and $\text{Var}(\epsilon_i)=\sigma^2$. Let $\mathbf{y}=(y_1,\,\dots,\,y_n)^T$ be the response vector and $\mathbf{X}=(x_{i\,j}; i=1\dots n, \,j=1,\dots p)$ be the design matrix. 
+
+\noindent
+Assume that only the first $p_{_0}$ variables are important. Let $\mathcal{A} =\lbrace 1,\dots,\,p\rbrace$ be the index set for the full model and $\mathcal{A}_0=\lbrace 1,\dots, p_{_0}\rbrace$ be the index set for the true model. The
+true regression coefficients can be denoted as $\bfmath{\beta}^\ast= (\bfmath{\beta}^{\ast\, T}_{_{\mathcal{A}_0}},\,\mathbf{0}^T)^T$. Now consider three
+different modelling strategies: 
+\begin{itemize}
+\item[] {\it Strategy I:} Fit the full model. Denote the full design matrix as $\mathbf{X}_{_\mathcal{A}}$ and the corresponding OLS estimator by $\widehat{\bfmath{\beta}}^{ols}_{_\mathcal{A}}$. 
+\item[] {\it Strategy II:} Fit the true model using the first $p_{_0}$ covariates. Denote the corresponding design matrix by $\mathbf{X}_{_{\mathcal{A}_0}}$ and the OLS estimator by $\widehat{\bfmath{\beta}}^{ols}_{_{\mathcal{A}_0}}$.
+\item[] {\it Strategy III:} Fit a subset model using only the first $p_{_1}$ covariates for some $p_{_1}<p_{_0}$. Denote the corresponding design matrix by $\mathbf{X}_{\mathcal{A}_1}$ and the OLS estimator by $\widehat{\bfmath{\beta}}^{ols}_{_{\mathcal{A}_1}}$.  
+\end{itemize}
+\begin{enumerate}
+\item[1. ] One possible consequence of including irrelevant variables in a regression model is that the predictions are not efficient (i.e., have larger variances) though they are unbiased. For any $\mathbf{x}\in\mathbb{R}^p$, show that
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)=\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}}\mathbf{x}_{_{\mathcal{A}_0}}\,,\quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)\geq \text{Var}(\widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_0}}\mathbf{x}_{_{\mathcal{A}_0}})\,,$$
+where $\mathbf{x}_{_{\mathcal{A}_0}}$ consists of the first $p_{_0}$
+elements of $\mathbf{x}$.   
+
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)= E[{\left( \mathbf{X}_{\mathcal{A}}^{T}\,\mathbf{X}_{\mathcal{A}}\,\right)}^{-1}\mathbf{X}_{\mathcal{A}}^{T}\,\mathbf{Y}\,\mathbf{x}_{_\mathcal{A}}]$$
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)= E\lbrack{\left( \mathbf{X}_{\mathcal{A}}^{T}\,\mathbf{X}_{\mathcal{A}}\,\right)}^{-1}\mathbf{X}_{\mathcal{A}}^{T}\,(\mathbf{X}_{\mathcal{A}}\,(\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}}\, 0) + \mathbf{e}\,)\mathbf{x}_{_\mathcal{A}}\rbrack$$
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)= E\lbrack{\left( \mathbf{X}_{\mathcal{A}}^{T}\,\mathbf{X}_{\mathcal{A}}\,\right)}^{-1}\mathbf{X}_{\mathcal{A}}^{T}\,(\mathbf{X}_{\mathcal{A}}\,(\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}} 0^{T}))\mathbf{x}_{_\mathcal{A}}\,+
+ \left(\mathbf{X}_{\mathcal{A}}^{T}\,\mathbf{X}_{\mathcal{A}}\,\right)^{-1}\mathbf{X}_{\mathcal{A}}^{T}\,\mathbf{e}\mathbf{x}_{_\mathcal{A}}\rbrack$$
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)= E\lbrack{\left( \mathbf{X}_{\mathcal{A}}^{T}\,\mathbf{X}_{\mathcal{A}}\,\right)}^{-1}\mathbf{X}_{\mathcal{A}}^{T}\,(\mathbf{X}_{_{\mathcal{A}}}\,(\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}} 0^{T}))\mathbf{x}_{_\mathcal{A}}\,\rbrack + 
+ \left(\mathbf{X}_{\mathcal{A}}^{T}\,\mathbf{X}_{\mathcal{A}}\,\right)^{-1}\mathbf{X}_{\mathcal{A}}^{T}\,E\lbrack\mathbf{e}\rbrack\,\mathbf{x}_{_\mathcal{A}}$$
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)= E\lbrack{\left( \mathbf{X}_{\mathcal{A}}^{T}\,\mathbf{X}_{\mathcal{A}}\,\right)}^{-1}\mathbf{X}_{\mathcal{A}}^{T}\,(\mathbf{X}_{_{\mathcal{A}}}\,(\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}}  0^{T}))\mathbf{x}_{_\mathcal{A}}\,\rbrack + 
+ \left(\mathbf{X}_{\mathcal{A}}^{T}\,\mathbf{X}_{\mathcal{A}}\,\right)^{-1}\mathbf{X}_{\mathcal{A}}^{T}\,\mathbf{0}\,\mathbf{x}_{_\mathcal{A}}$$
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)= E\lbrack(\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}}  0^{T})\mathbf{x}_{_\mathcal{A}}\,\rbrack$$
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)= E\lbrack\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}}\mathbf{x}_{_{\mathcal{A}_0}})\,\rbrack$$
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)= \bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}}\mathbf{x}_{_{\mathcal{A}_0}})\,\,$$
+
+
+$$\quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)= \text{Var}\left( (\mathbf{X}_{\mathcal{A}}^{T}\,\mathbf{X}_{\mathcal{A}}\,)^{-1}\mathbf{X}_{\mathcal{A}}^{T}\,\mathbf{Y}\mathbf{x}_{_\mathcal{A}}\,\right)$$
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)= [(\mathbf{X}^{T}_{\mathbf{A}}\,\mathbf{X}_{\mathbf{A}})^{-1}\,\mathbf{X}^{T}_{\mathbf{A}}\,]\mathbf{x}_{_\mathcal{A}}\,\text{Var}\left( \mathbf{Y} \right)\mathbf{x}^{T}_{_\mathcal{A}}[(\mathbf{X}^{T}_{\mathbf{A}}\,\mathbf{X}_{\mathbf{A}})^{-1}\,\mathbf{X}^{T}_{\mathbf{A}}\,]^{T}$$
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)= [(\mathbf{X}^{T}_{\mathbf{A}}\,\mathbf{X}_{\mathbf{A}})^{-1}\,\mathbf{X}^{T}_{\mathbf{A}}\,]\mathbf{x}_{_\mathcal{A}}\,\text{Var}\left( \bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}}\,\mathbf{x}_{_{\mathcal{A}_0}} + \mathbf{\epsilon} \right)\mathbf{x}^{T}_{_\mathcal{A}}[(\mathbf{X}^{T}_{\mathbf{A}}\,\mathbf{X}_{\mathbf{A}})^{-1}\,\mathbf{X}^{T}_{\mathbf{A}}\,]^{T}$$
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)= [(\mathbf{X}^{T}_{\mathbf{A}}\,\mathbf{X}_{\mathbf{A}})^{-1}\,\mathbf{X}^{T}_{\mathbf{A}}\,]\mathbf{x}_{_\mathcal{A}}\,\text{Var}\left( \bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}}\,\mathbf{x}_{_{\mathcal{A}_0}})\,\right)\mathbf{x}^{T}_{_\mathcal{A}}[(\mathbf{X}^{T}_{\mathbf{A}}\,\mathbf{X}_{\mathbf{A}})^{-1}\,\mathbf{X}^{T}_{\mathbf{A}}\,]^{T} + [(\mathbf{X}^{T}_{\mathbf{A}}\,\mathbf{X}_{\mathbf{A}})^{-1}\,\mathbf{X}^{T}_{\mathbf{A}}\,]\mathbf{x}_{_\mathcal{A}}\,\text{Var}\left(\,\mathbf{\epsilon}\, \right)\mathbf{x}^{T}_{_\mathcal{A}}[(\mathbf{X}^{T}_{\mathbf{A}}\,\mathbf{X}_{\mathbf{A}})^{-1}\,\mathbf{X}^{T}_{\mathbf{A}}\,]^{T}$$
+Assuming X is non-stochastic and independent of the error.
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)=  [(\mathbf{X}^{T}_{\mathbf{A}}\,\mathbf{X}_{\mathbf{A}})^{-1}\,\mathbf{X}^{T}_{\mathbf{A}}\,]\mathbf{x}_{_\mathcal{A}}\,\text{Var}\left(\,\mathbf{\epsilon}\, \right)\mathbf{x}^{T}_{_\mathcal{A}}[(\mathbf{X}^{T}_{\mathbf{A}}\,\mathbf{X}_{\mathbf{A}})^{-1}\,\mathbf{X}^{T}_{\mathbf{A}}\,]^{T}$$
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)=  [(\mathbf{X}^{T}_{\mathbf{A}}\,\mathbf{X}_{\mathbf{A}})^{-1}\,\mathbf{X}^{T}_{\mathbf{A}}\,]\mathbf{x}_{_\mathcal{A}}\,\mathbf{\sigma}^{2}\,\mathbf{x}^{T}_{_\mathcal{A}}[(\mathbf{X}^{T}_{\mathbf{A}}\,\mathbf{X}_{\mathbf{A}})^{-1}\,\mathbf{X}^{T}_{\mathbf{A}}\,]^{T}$$
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)=  \mathbf{\sigma}^{2}\,\mathbf{x}_{_\mathcal{A}}\,\mathbf{x}^{T}_{_\mathcal{A}}[(\mathbf{X}^{T}_{\mathbf{A}}\,\mathbf{X}_{\mathbf{A}})^{-1}\,\mathbf{X}^{T}_{\mathbf{A}}\,][\mathbf{X}_{\mathbf{A}}\,(\mathbf{X}^{T}_{\mathbf{A}}\,\mathbf{X}_{\mathbf{A}})^{-1}\,]$$
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)=  \mathbf{\sigma}^{2}\,\mathbf{x}_{_\mathcal{A}}\,\mathbf{x}^{T}_{_\mathcal{A}}(\mathbf{X}^{T}_{\mathbf{A}}\,\mathbf{X}_{\mathbf{A}})^{-1}\,$$
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)=  \mathbf{\sigma}^{2}\,\mathbf{x}_{_\mathcal{A}}\,\mathbf{x}^{T}_{_\mathcal{A}}\left((\mathbf{X}_{_{\mathcal{A}_0}}\,\mathbf{X}_{_{\mathcal{A}-\mathcal{A}_0}})^{T}\,((\mathbf{X}_{_{\mathcal{A}_0}}\,\mathbf{X}_{_{\mathcal{A}-\mathcal{A}_0}} )\right)^{-1}\,$$
+
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right)\geq  \mathbf{\sigma}^{2}\,\mathbf{x}_{_\mathcal{A}}\,\mathbf{x}^{T}_{_\mathcal{A}}\left(\mathbf{X}_{_{\mathcal{A}_0}}\,^{T}\,\mathbf{X}_{_{\mathcal{A}_0}}\,\right)^{-1}\, =  \text{Var}(\widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_0}}\mathbf{x}_{_{\mathcal{A}_0}})\,$$
+
+
+\item[2. ] One consequence of excluding important variables in a linear model is that the predictions are biased, though they have smaller variances. For any $\mathbf{x}\in\mathbb{R}^p$, show that
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_1}}\mathbf{x}_{_{\mathcal{A}_1}}\,\right)\neq\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}}\mathbf{x}_{_{\mathcal{A}_0}}\,,\quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_1}}\mathbf{x}_{_{\mathcal{A}_1}}\,\right)\leq \text{Var}(\widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_0}}\mathbf{x}_{_{\mathcal{A}_0}})\,,$$
+where $\mathbf{x}_{_{\mathcal{A}_1}}$ consists of the first $p_{_1}$ elements of $\mathbf{x}$.
+
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_1}}\mathbf{x}_{_{\mathcal{A}_1}}\,\right) = E[\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{Y}\,\mathbf{x}_{_{\mathcal{A}_1}}] $$
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_1}}\mathbf{x}_{_{\mathcal{A}_1}}\,\right) = E[\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\left(\mathbf{X}_{_{\mathcal{A}_0}}\,\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}}+\mathbf{\epsilon} \right)\,\mathbf{x}_{_{\mathcal{A}_1}}] $$
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_1}}\mathbf{x}_{_{\mathcal{A}_1}}\,\right) = E[\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\left(\mathbf{X}_{_{\mathcal{A}_0}}\,\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}}\right)\mathbf{x}_{_{\mathcal{A}_1}} +\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{\epsilon} \,\mathbf{x}_{_{\mathcal{A}_1}}] $$
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_1}}\mathbf{x}_{_{\mathcal{A}_1}}\,\right) = E[\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\left(\mathbf{X}_{_{\mathcal{A}_0}}\,\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}}\right)\mathbf{x}_{_{\mathcal{A}_1}}] + \left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,E[\mathbf{\epsilon}] \,\mathbf{x}_{_{\mathcal{A}_1}} $$
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_1}}\mathbf{x}_{_{\mathcal{A}_1}}\,\right) = E[\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\left(\mathbf{X}_{_{\mathcal{A}_1}}\,\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_1}} + \mathbf{X}_{_{\mathcal{A}_0} - \mathcal{A}_1}\,\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0} - \mathcal{A}_1}\right)\mathbf{x}_{_{\mathcal{A}_1}}] + \left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,0 \,\mathbf{x}_{_{\mathcal{A}_1}} $$
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_1}}\mathbf{x}_{_{\mathcal{A}_1}}\,\right) = E[\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\left(\mathbf{X}_{_{\mathcal{A}_1}}\,\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_1}} + \mathbf{X}_{_{\mathcal{A}_0} - \mathcal{A}_1}\,\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0} - \mathcal{A}_1}\right)\mathbf{x}_{_{\mathcal{A}_1}}]$$
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_1}}\mathbf{x}_{_{\mathcal{A}_1}}\,\right) = E[\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\left(\mathbf{X}_{_{\mathcal{A}_1}}\,\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_1}}\right)\mathbf{x}_{_{\mathcal{A}_1}}] + E[\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_0} - \mathcal{A}_1}\,\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0} - \mathcal{A}_1}\mathbf{x}_{_{\mathcal{A}_1}}]$$
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_1}}\mathbf{x}_{_{\mathcal{A}_1}}\,\right) = \bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_1}}\,\mathbf{x}_{_{\mathcal{A}_1}} + \left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_0} - \mathcal{A}_1}\,\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0} - \mathcal{A}_1}\mathbf{x}_{_{\mathcal{A}_1}}$$
+$$E\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_1}}\mathbf{x}_{_{\mathcal{A}_1}}\,\right) \neq \bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}}\mathbf{x}_{_{\mathcal{A}_0}}\,$$
+
+
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right) = \text{Var}\left(\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,(\mathbf{Y}\,)\mathbf{x}^{T}_{_{\mathcal{A}_1}}\right) $$
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right) = [\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,]\mathbf{x}_{_{\mathcal{A}_1}}\text{Var}\left(\mathbf{Y}\,\right)\mathbf{x}^{T}_{_{\mathcal{A}_1}}[\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,]^{T} $$
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right) = [\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,]\mathbf{x}_{_{\mathcal{A}_1}}\text{Var}\left(\mathbf{X}_{_{\mathcal{A}_0}}\,\bfmath{\beta}^{\ast\,T}_{_{\mathcal{A}_0}}+\mathbf{\epsilon} \right)\,\mathbf{x}^{T}_{_{\mathcal{A}_1}}\mathbf{X}_{_{\mathcal{A}_1}}\,\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-T}\, $$
+Assuming X is non-stochastic and independent of the error term
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right) = [\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,]\mathbf{x}_{_{\mathcal{A}_1}}\text{Var}\left(\mathbf{\epsilon} \right)\,\mathbf{x}^{T}_{_{\mathcal{A}_1}}\mathbf{X}_{_{\mathcal{A}_1}}\,\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-T}\, $$
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right) = [\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,]\mathbf{x}_{_{\mathcal{A}_1}}\left(\,\mathbf{\sigma}^{2}\right)\mathbf{x}^{T}_{_{\mathcal{A}_1}}\mathbf{X}_{_{\mathcal{A}_1}}\,\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-T}\, $$
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right) = \mathbf{\sigma}^{2}\,\mathbf{x}_{_{\mathcal{A}_1}}\mathbf{x}^{T}_{_{\mathcal{A}_1}}[\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\,\mathbf{X}^{T}_{_{\mathcal{A}_1}}\,]\mathbf{X}_{_{\mathcal{A}_1}}\,\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\, $$
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right) = \mathbf{\sigma}^{2}\,\mathbf{x}_{_{\mathcal{A}_1}}\mathbf{x}^{T}_{_{\mathcal{A}_1}}\left( \mathbf{X}^{T}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A}_1}}\right)^{-1}\, $$
+$$ \quad \text{Var}\left( \widehat{\bfmath{\beta}}^{ols\,T}_{_\mathcal{A}}\mathbf{x}_{_\mathcal{A}}\,\right) \leq \mathbf{\sigma}^{2}\,(\mathbf{x}_{_{\mathcal{A}_1}}\,\mathbf{x}_{_{\mathcal{A_0}\setminus \mathcal{A_1}}})(\mathbf{x}_{_{\mathcal{A}_1}}\,\mathbf{x}_{_{\mathcal{A_0}
+\setminus\mathcal{A_1}}})^{T}\,\left( \mathbf{X}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A_0
+\setminus A_1}}}\right)^{T}\,\left(\mathbf{X}_{_{\mathcal{A}_1}}\,\mathbf{X}_{_{\mathcal{A_0 \setminus A_1}}}\right)^{-1}\,= \text{Var}(\widehat{\bfmath{\beta}}^{ols\,T}_{_{\mathcal{A}_0}}\mathbf{x}_{_{\mathcal{A}_0}})\, $$
+
+\end{enumerate}
+\noindent
+
+\newpage
+\noindent 
+{\bf Problem 3. } In an enzyme kinetics study the velocity of a reaction ($Y$) is expected to be related to the concentration ($X$) as follows  
+$$Y_i=\frac{\beta_0 \,x_i}{\beta_1+x_i}+\epsilon_i\,.$$
+The dataset ``{\tt Enzyme.txt}" posted on D2L contains eighteen data points related to this study. 
+\begin{itemize}
+\item[i) ] To obtain starting values for $\beta_0$ and $\beta_1$, observe that when the error term is ignored we have $Y'_i=\alpha_0+\alpha_1\,x'_i$, where $Y'_i=1/Y_i$, $\alpha_0=1/\beta_0$, $\alpha_1=\beta_1/\beta_0$, and $x'_i=1/x_i$. Fit a linear regression function to the transformed data to obtain initial estimates for $\beta_0$ and $\beta_1$ used in {\tt nls}. 
+
+\begin{lstlisting}[language=R]
+library(nlstools)
+enzyme.data <- read.csv("~/Dropbox/Academic notes/5 A/STAT 444/Assignments/A2/Enzyme.txt",sep="")
+trans.data <- 1/enzyme.data
+fit.prime <- lm(Y~x,data=trans.data) 
+summary(fit.prime)
+\end{lstlisting}
+
+\item[ii) ] Using the starting values obtained in part (i), find the least squares estimates of the parameters $\beta_0$ and $\beta_1$ 
+
+\begin{lstlisting}[language=R]
+par.ini=c(b0=(1/fit.prime$coefficient[1]), 
+          b1=(fit.prime$coefficient[2]/fit.prime$coefficient[1]))
+names(par.ini) <- c("b0","b1")
+Y <- enzyme.data$Y ; X <- enzyme.data$x
+enzyme.fit <-nls(Y~(b0*X)/(b1+X),start=par.ini,trace=TRUE)
+enzyme.fit
+\end{lstlisting}
+
+\item[iii) ] Plot the estimated nonlinear regression over the scatter plot of the data. Does the fit appear to be adequate?
+
+\begin{lstlisting}[language=R]
+plot(X,Y,type="p",xlab="X",ylab="Response (Y)",
+     main="Enzymes non-linear fit",
+     xlim=c(0,50),ylim=c(0,23))
+xx<-0:50
+b<-c(28.13705,12.57445)
+yy<-b[1]*xx/(b[2]+xx)
+points(xx,yy,"l")
+\end{lstlisting}
+
+\includegraphics[scale=0.4]{q3.png}
+
+\item[-] The fit seems good based on the plot. The curve seems to smoothly estimate the observed values with reasonable accuracy.
+
+\item[iv) ] Obtain the residuals and plot them against the fitted values and against $X$ on separate graphs. Also obtain a normal probability plot. What do your plots show? 
+
+\begin{lstlisting}[language=R]
+par(mfrow=c(1,2))
+plot(y=nlsResiduals(enzyme.fit)$resi1[,2],x=nlsResiduals(enzyme.fit)$resi1[,1])
+plot(y=nlsResiduals(enzyme.fit)$resi1[,2],x=X)
+plot(rnorm(18)) ;
+\end{lstlisting}
+
+\includegraphics[scale=0.4]{q3i.png}
+\includegraphics[scale=0.4]{q3ii.png}
+\includegraphics[scale=0.4]{q3iii.png}
+
+
+\item[v) ] Given that only 18 trials can be made, what are some advantages and disadvantages of considering fewer concentration levels but with some replications, as compared to considering 18 different concentration levels as was done here?
+
+An advantage of more replications in fewer groups would be to see the variability in the response within concentrations to get a better idea of how representative the sample drawn from any one concentration may be.
+A disadvantage would be the loss of information about a larger variety of concentrations and differences between those concentrations. You trade more accuracy of an estimate in any one concentration for more varied concentrations being evaluated.
+
+\item[vi) ] Assume that the fitted model is appropriate and that large-sample inferences can be employed here. 
+\begin{itemize}
+\item[(1) ] Obtain an approximate 95 percent confidence interval for $\beta_0$.
+
+\begin{lstlisting}[language=R]
+confint(enzyme.fit)
+\end{lstlisting}
+
+\item[(2) ] Test whether or not $\beta_1=20$; use $\alpha=0.05$. State the alternatives, decision rule, and conclusion.  
+
+Test whether or not $\beta_1=20, \alpha = 0.05$
+$H_{0}: \beta_1 = 20$ 
+$H_{0}: \beta_1 \neq 20$ 
+Beta 1 - 20 / t* se(beta1)
+The alternative hypothesis, $H_{A}: \beta_1 \neq 20$ and based on the confidence interval, the interval does not contain 20 with 95\% confidence, hence, we reject $H_{0}$.
+
+\end{itemize}
+\end{itemize}
+
+\newpage
+\noindent
+{\bf Problem 4. (From JWHT)} Suppose we estimate the regression coefficients in  a linear regression model by minimizing
+$$\sum\limits_{i=1}^n \left( y_i-\beta_0-\sum\limits_{j=1}^p\beta_j\,x_{i\,j}\right)^2+\lambda\,\sum\limits_{j=1}^p\beta_j^2$$
+for a particular value of $\lambda$. For parts (a) to (e), indicate which of i. to v. is correct. Justify your answer. 
+\begin{itemize}
+\item[(a) ] As we increase $\lambda$ from 0, the training {\tt RSS} will. 
+\begin{itemize}
+\item[i. ] Increase initially, and then eventually start decreasing in an inverted U shape.
+\item[ii. ] Decrease initially, and then eventually start increasing in a U shape. 
+\textbf{\item[iii. ] Steadily increase.}
+\item[iv. ] Steadily decrease. 
+\item[v. ] Remain constant.  
+\end{itemize}
+
+This is because there is a heavier constraint on the model so the fit to the training data gets worse and RSS increases.
+
+\item[(b) ] Repeat (a) for test {\tt RSS}.
+\begin{itemize} 
+\item[ii. ] \textbf{Decrease initially, and then eventually start increasing in a U shape.}
+\end{itemize}
+
+As $\lambda$ increases from 0, the model will improve as there will be less overfitting to the training data. This will improve the RSS initially before the coefficients of $\beta$ approach 0, when the fit worsens again.
+
+\item[(c) ] Repeat (a) for {\tt variance}.
+\begin{itemize}
+\item[iv. ] \textbf{Steadily decrease.} 
+\end{itemize}
+
+There is more of a penalty on the model, decreasing the overfitting and the magnitude of coefficients steadily as $\lambda$ increases.
+
+\item[(d) ] Repeat (a) for {\tt squared bias}.
+\begin{itemize}
+
+\item[iii. ] \textbf{Steadily increase.}
+ 
+The model steadily becomes less flexible and the coefficients are forced away from their best estimates which moves the mean from the true mean.
+ 
+\end{itemize}
+\end{itemize}
+
+\newpage
+\noindent
+{\bf Problem 5. (From JWHT)} I this problem, we perform cross-validation on a simulated data set. 
+\begin{itemize}
+\item[(a) ] Generate a simulated data set as follows
+\begin{verbatim}
+> set.seed(1)
+> e=rnorm(100)
+> x=rnorm(100)
+> y=x-2*x^2+e
+\end{verbatim}
+In this data set, what is $n$ and what is $p$? Write out the model used to generate the data in equation form.
+
+$n$, the sample size is 100 since there are 100 data points/ observations and $p$ is 2 since there are two parameters: one linear and one quadratic.
+
+\item[(b) ] Create a scatterplot of $X$ against $Y$. Comment on what you find.
+\begin{verbatim}
+> plot(x,y)
+\end{verbatim}
+\includegraphics[scale=0.4]{q5.png}
+
+There is an inverted "U" trend in the data centered at 0 and rising, at most, just above 2.
+
+\item[(c) ] Set a random seed, and then compute the LOOCV errors that result from fitting the following four models using least squares:
+\begin{itemize}
+
+\begin{lstlisting}[language=R]
+set.seed(2)
+e=rnorm(100)
+x=rnorm(100)
+y=x-2*x^2+e
+#LOOCV 
+LCV <- function(resp,design) {
+        errors <- rep(0,length(resp))
+                 for (i in 1:length(resp)){
+                        if(is.vector(design)){
+                        datai <- data.frame(resp=resp[-i],design=design[-i])
+                        } else {
+                        datai <- data.frame(resp=resp[-i],design=design[-i,])        
+                        }
+                        mod <- lm(resp ~.,data=datai)
+                        newd <- data.frame(design=design)
+                        fhati <- predict(mod,newdata=newd)[i]
+                        errors[i] <- (resp[i] - fhati)^2
+                }
+        return(mean(errors))
+}
+\end{lstlisting}
+The model used to generate the data is $Y=\beta_1X+\beta_2X^{2}+\epsilon$ with $\beta_1=1$ , $\beta_2=-2$, $X \sim N(0,1)$ and $\epsilon \sim N(0,1)$.
+
+\begin{lstlisting}[language=R]
+datX <- data.frame(y,x)
+modi <- lm(y~x,data=datX) ; summary(modi)
+LOOCVi <- LCV(y,datX[,-1])
+\end{lstlisting}
+
+\item[ii. ] $Y=\beta_0+\beta_1\,X+\beta_2\,X^2+\epsilon$
+
+\begin{lstlisting}[language=R]
+datX <- data.frame(y,x,x^2)
+modii <- lm(y~x+x.2,data=datX) ; summary(modii)
+LOOCVii <- LCV(y,datX[,-1]) 
+\end{lstlisting}
+
+\item[iii. ] $Y=\beta_0+\beta_1\,X+\beta_2\,X^2+\beta_3\,X^3+\epsilon$
+
+\begin{lstlisting}[language=R]
+datX <- data.frame(y,x,x^2,x^3)
+modiii <- lm(y~x+x.2+x.3,data=datX) ; summary(modiii)
+LOOCViii <- LCV(y,datX[,-1])
+\end{lstlisting}
+
+\item[iv. ] $Y=\beta_0+\beta_1\,X+\beta_2\,X^2+\beta_3\,X^3+\beta_4\,X^4+\epsilon$
+
+\begin{lstlisting}[language=R]
+datX <- data.frame(y,x,x^2,x^3,x^4) 
+modiv <- lm(y~x+x.2+x.3+x.4,data=datX) ; summary(modiv)
+LOOCVvi <- LCV(y,datX[,-1])
+\end{lstlisting}
+\end{itemize}
+
+\item[(d) ] Repeat (c) using another random seed, and report your results. Are your results the same as what you got in (c)? Why?
+
+\begin{lstlisting}[language=R]
+set.seed(45)
+e=rnorm(100)
+x=rnorm(100)
+y=x-2*x^2+e
+
+datX <- data.frame(y,x)
+modi <- lm(y~x,data=datX) ; summary(modi)
+LOOCVi <- LCV(y,datX[,-1])
+datX <- data.frame(y,x,x^2)
+modii <- lm(y~x+x.2,data=datX) ; summary(modii)
+LOOCVii <- LCV(y,datX[,-1]) 
+datX <- data.frame(y,x,x^2,x^3)
+modiii <- lm(y~x+x.2+x.3,data=datX) ; summary(modiii)
+LOOCViii <- LCV(y,datX[,-1])
+datX <- data.frame(y,x,x^2,x^3,x^4) 
+modiv <- lm(y~x+x.2+x.3+x.4,data=datX) ; summary(modiv)
+LOOCVvi <- LCV(y,datX[,-1])
+\end{lstlisting}
+
+The results are not the same as in (c) because the random data generated is slightly different with the change of seed. Hence, the model's fit to the data is different.
+
+\item[(e) ] Which of the models in (c) had the smallest LOOCV error? Is this what you expected? Explain your answer.
+
+Smallest LOOCV error was for the quadratic model which was as expected since the true model has a quadratic form.
+
+\item[(f) ] Comment on the statistical significance of the coefficient estimates that results from fitting each of the models in (c) using least squares. Do these results agree with the conclusions drawn based on the cross-validation results? 
+\end{itemize}
+
+The linear models beta coefficient was moderately significant.
+The quadratic models linear and quadratic components were very significant while the intercept was insignificant
+The cubic model had significant linear and quadratic terms but insignificant intercept and cubic coefficients.
+The quartic model had significant linear and quadratic terms with insignificant quartic, intercept and cubic coefficients.
+These results agree with the cross-validation results that showed the least error in the quadratic model. Each of the models fit with at least quadratic terms had only statistically significant  linear and quadratic coefficients. 
+
+\newpage
+\noindent
+{\bf Problem 7. (From JWHT)} Recall the Boston housing data set from Problem 1. Suppose we try to predict the response variable {\tt crim} (per capita crime rate) based on the other variables in the Boston data set.
+\begin{itemize}
+\item[(a) ] Try out some of the regression methods explored in this course, such as best subset selection, forward selection, backward elimination, ridge regression, and the lasso. Present and discuss results for the approaches that you consider.
+
+\begin{lstlisting}[language=R]
+library(MASS)
+summary(Boston) ; attach(Boston) 
+
+# best subset selection , forward selection, backward elimination, 
+# ridge regression, lasso
+library(leaps)
+# Best Subset selection
+Design <- Boston[,-1]
+Response <- data.frame(crim=Boston[,1])
+crime.subsets <- leaps(x=Boston[,-1],y=Boston$crim,nbest=1,method="Cp")
+plot(crime.subsets$size,crime.subsets$Cp,pch=23,bg='red',cex=1.5)
+crime.subsets.Cp <- crime.subsets$which[which((crime.subsets$Cp == min(crime.subsets$Cp))),]
+crime.subsets.Cp
+crime.subsets
+# Analyze the subsets
+\end{lstlisting}
+\includegraphics[scale=0.4]{bestsubset.png}
+
+\begin{lstlisting}[language=R]
+# Backward elimination next
+back.elim.mod <- lm(crim~.,data=Boston)
+summary(back.elim.mod)
+\end{lstlisting}
+In iteration 1, the least of the statistically insignificant coefficient was age. So it was removed from the model.
+\begin{lstlisting}[language=R]
+back.elim.mod <- lm(crim~.-age,data=Boston)
+summary(back.elim.mod)
+\end{lstlisting}
+In iteration 2, the least of the statistically insignificant coefficient was chas. So it was removed from the model.
+\begin{lstlisting}[language=R]
+back.elim.mod <- lm(crim~.-age-chas,data=Boston)
+summary(back.elim.mod)
+\end{lstlisting}
+In iteration 3, the least of the statistically insignificant coefficient was tax. So it was removed from the model.
+\begin{lstlisting}[language=R]
+back.elim.mod <- lm(crim~.-age-chas-tax,data=Boston)
+summary(back.elim.mod)
+\end{lstlisting}
+In iteration 4, the least of the statistically insignificant coefficient was rm. So it was removed from the model.
+\begin{lstlisting}[language=R]
+back.elim.mod <- lm(crim~.-age-chas-tax-rm,data=Boston)
+summary(back.elim.mod)
+\end{lstlisting}
+In iteration 5, the least of the statistically insignificant coefficient was indus. So it was removed from the model.
+\begin{lstlisting}[language=R]
+back.elim.mod <- lm(crim~.-age-chas-tax-rm-indus,data=Boston)
+summary(back.elim.mod)
+\end{lstlisting}
+In iteration 6, the least of the statistically insignificant coefficient was lstat. So it was removed from the model.
+\begin{lstlisting}[language=R]
+back.elim.mod <- lm(crim~.-age-chas-tax-rm-indus-lstat,data=Boston)
+summary(back.elim.mod)
+\end{lstlisting}
+In iteration 7, the least of the statistically insignificant coefficient was ptratio. So it was removed from the model.
+\begin{lstlisting}[language=R]
+back.elim.mod <- lm(crim~.-age-chas-tax-rm-indus-lstat-ptratio,data=Boston)
+summary(back.elim.mod)
+\end{lstlisting}
+In iteration 8, all of the predictors were statistically significant so we stopped the backward elimination. The resulting model fit crime against: zn, nox, dis, rad, black and medv.
+\begin{lstlisting}[language=R]
+# Forward selection next
+for.sel.mod <- lm(crim~1,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+The constant model fit was significant.
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~zn,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for zn is 5.51e-06
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for indus is <2e-16
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~chas,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for chas is 0.209
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~nox,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for nox is < 2e-16
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~rm,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for rm is 6.35e-07
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~age,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for age is 2.85e-16
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~dis,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for dis is <2e-16
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~rad,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for rad is <2e-16
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~tax,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for tax is <2e-16
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~ptratio,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for ptratio is 2.94e-11
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~black,data=Boston)
+\end{lstlisting}
+summary(for.sel.mod)
+t value for black is <2e-16
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~lstat,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for lstat is < 2e-16
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~medv,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for medv is < 2e-16
+Hence, indus was the first, equally most significant predictor and was added to the model.
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+zn,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for zn is .63048
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+chas,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for chas is 0.04473
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+nox,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for nox is < 2.27e-05
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rm,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for rm is 0.109
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+age,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for age is 0.0035
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+dis,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for dis is 0.00135
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for rad is <2e-16
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+tax,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for tax is <2e-16
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+ptratio,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for ptratio is 0.000336
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+black,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for black is 1.26e-10
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+lstat,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for lstat is 3.87e-11
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+medv,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for medv is 4.99e-08
+The best candidate for second variable was rad
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+zn,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for zn is .655
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+chas,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for chas is .113
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+nox,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for nox is .4198
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+rm,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for rm is .0207
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+age,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for age is .0707
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+dis,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for dis is 0.0469
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+tax,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for tax is .74840
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+ptratio,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for ptratio is 0.833
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+black,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for black is 0.000888
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+lstat,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for lstat is 6.72e-07
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for medv is 5.31e-06
+The best candidate for third variable is medv
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+zn,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for zn is .265
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+chas,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for chas is .5683
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+nox,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for nox is .602
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+rm,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for rm is .45
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+age,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for age is .143
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis,data=Boston)
+summary(for.sel.mod)
+t value for dis is .004288
+\end{lstlisting}
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+tax,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for tax is .6613
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+ptratio,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for ptratio is 0.03393
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+black,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for black is 0.00784
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+medv+rad+lstat,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for lstat is 0.00637
+The best candidate for fourth variable is dis
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+zn,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for zn is .00208
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+chas,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for chas is .475131
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+nox,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for nox is .27842
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+rm,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for rm is .4457
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+age,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for age is .88487
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+tax,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for tax is .87484
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+ptratio,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for ptratio is 0.045146
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+black,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for black is 0.01114
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+medv+rad+dis+lstat,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for lstat is 0.0412
+The best candidate for the fifth variable is zn
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+zn+chas,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for chas is .515
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+zn+nox,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for nox is .176892
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+zn+rm,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for rm is .56843
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+zn+age,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for age is .92596
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+zn+tax,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for tax is .35984
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+zn+ptratio,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for ptratio is .238924
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+zn+black,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for black is .020258
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+medv+rad+dis+zn+lstat,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for lstat is 0.074985
+The best candidate for sixth variable is black
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+zn+black+chas,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for chas is .5528
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+zn+black+nox,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for nox is .13245
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+zn+balck+rm,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for rm is .13245
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+zn+black+age,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for age is .902952
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+zn+black+tax,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for tax is .36155
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+rad+medv+dis+zn+black+ptratio,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for ptratio is .352914
+\begin{lstlisting}[language=R]
+for.sel.mod <- lm(crim~indus+medv+rad+dis+zn+black+lstat,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+t value for lstat is .09057
+After seven iterations, there are no new significant variables to add. The final model fits crime against indus, medv, rad, dis, zn and black. 
+\begin{lstlisting}[language=R]
+#Final model
+for.sel.mod <- lm(crim~indus+medv+rad+dis+zn+black,data=Boston)
+summary(for.sel.mod)
+\end{lstlisting}
+
+\begin{lstlisting}[language=R]
+# (Backward) Stepwise selection
+step.sel.mod <- lm(crim~.,data=Boston)
+summary(step.sel.mod)
+\end{lstlisting}
+Age is the first variable to be dropped
+\begin{lstlisting}[language=R]
+step.sel.mod <- lm(crim~.-age,data=Boston)
+summary(step.sel.mod)
+\end{lstlisting}
+Chas is the next variable to be dropped
+\begin{lstlisting}[language=R]
+step.sel.mod <- lm(crim~.-age-chas,data=Boston)
+summary(step.sel.mod)
+Checking if age could be re-added
+\begin{lstlisting}[language=R]
+step.sel.mod <- lm(crim~.-chas,data=Boston)
+summary(step.sel.mod)
+\end{lstlisting}
+Age is still statistically insignificant so it will remain dropped and the next variable to be dropped is tax
+\begin{lstlisting}[language=R]
+step.sel.mod <- lm(crim~.-age-chas-tax,data=Boston)
+summary(step.sel.mod)
+# Checking if age or chas could be re-added
+step.sel.mod <- lm(crim~.-chas-tax,data=Boston)
+summary(step.sel.mod)
+step.sel.mod <- lm(crim~.-age-tax,data=Boston)
+summary(step.sel.mod)
+\end{lstlisting}
+Both age and chas are still statistically insignificant so the will remain dropped and the next variable to drop is rm
+\begin{lstlisting}[language=R]
+step.sel.mod <- lm(crim~.-age-chas-tax-rm,data=Boston)
+summary(step.sel.mod)
+# Checking if age or chas or tax could be re-added
+step.sel.mod <- lm(crim~.-chas-tax-rm,data=Boston)
+summary(step.sel.mod)
+step.sel.mod <- lm(crim~.-age-tax-rm,data=Boston)
+summary(step.sel.mod)
+step.sel.mod <- lm(crim~.-age-chas-rm,data=Boston)
+summary(step.sel.mod)
+\end{lstlisting}
+Age, chas and tax all still are statistically insignificant and so will remain dropped and the next variable to drop is indus
+\begin{lstlisting}[language=R]
+step.sel.mod <- lm(crim~.-age-chas-tax-rm,data=Boston)
+summary(step.sel.mod)
+# Checking if age or chas or tax or rm could be re-added
+step.sel.mod <- lm(crim~.-chas-tax-rm-indus,data=Boston)
+summary(step.sel.mod)
+step.sel.mod <- lm(crim~.-age-tax-rm-indus,data=Boston)
+summary(step.sel.mod)
+step.sel.mod <- lm(crim~.-age-chas-rm-indus,data=Boston)
+summary(step.sel.mod)
+step.sel.mod <- lm(crim~.-age-chas-tax-indus,data=Boston)
+summary(step.sel.mod)
+\end{lstlisting}
+Age, chas, tax and rm all are still statistically insignificant and so will remain dropped and the next variable to drop is lstat
+\begin{lstlisting}[language=R]
+step.sel.mod <- lm(crim~.-age-chas-tax-rm-indus,data=Boston)
+summary(step.sel.mod)
+# Checking if age or chas or tax or rm or indus could be re-added
+step.sel.mod <- lm(crim~.-chas-tax-rm-indus-lstat,data=Boston)
+summary(step.sel.mod)
+step.sel.mod <- lm(crim~.-age-tax-rm-indus-lstat,data=Boston)
+summary(step.sel.mod)
+step.sel.mod <- lm(crim~.-age-chas-rm-indus-lstat,data=Boston)
+summary(step.sel.mod)
+step.sel.mod <- lm(crim~.-age-chas-tax-indus-lstat,data=Boston)
+summary(step.sel.mod)
+step.sel.mod <- lm(crim~.-age-chas-tax-rm-lstat,data=Boston)
+summary(step.sel.mod)
+\end{lstlisting}
+All the curently excluded variables remain statistically insignificant and so will remain dropped and the next variable to remove is ptratio
+\begin{lstlisting}[language=R]
+step.sel.mod <- lm(crim~.-age-chas-tax-rm-indus-lstat,data=Boston)
+summary(step.sel.mod)
+# Checking if age or chas or tax or rm or indus or lstat could be re-added
+step.sel.mod <- lm(crim~.-chas-tax-rm-indus-lstat-ptratio,data=Boston)
+summary(step.sel.mod)
+step.sel.mod <- lm(crim~.-age-tax-rm-indus-lstat-ptratio,data=Boston)
+summary(step.sel.mod)
+step.sel.mod <- lm(crim~.-age-chas-rm-indus-lstat-ptratio,data=Boston)
+summary(step.sel.mod)
+step.sel.mod <- lm(crim~.-age-chas-tax-indus-lstat-ptratio,data=Boston)
+summary(step.sel.mod)
+step.sel.mod <- lm(crim~.-age-chas-tax-rm-indus-ptratio,data=Boston)
+summary(step.sel.mod)
+# Checking if age or chas or tax or rm or indus or lstat or ptratio could be re-added
+step.sel.mod <- lm(crim~.-age-chas-tax-rm-indus-lstat-ptratio,data=Boston)
+summary(step.sel.mod)
+\end{lstlisting}
+All the variables are statistically significant now so the stepwise selection terminates giving the model fitting crime against zn, nox, dis, rad, black and medv.
+
+
+
+\item[(b) ] Propose a model (or set of models) that seem to perform well on this data set, and justify your answer. Make sure that you are evaluating model performance using validation set error, cross- validation, or some other reasonable alternative, as opposed to using training error.
+
+\begin{lstlisting}[language=R]
+# Leave one out and Generalized CV scores
+# make a vector for each entry and find the min in each measure
+LCVscores <- rep(0,16)
+GCVscores <- rep(0,16)
+AICscores <- rep(0,16)
+BICscores <- rep(0,16)
+Mallowscores <- rep(0,16)
+SUREscores <- rep(0,16)
+ArSscores <- rep(0,16)
+
+LCVscores[1] <-LCV(Boston[,"crim"],Boston[,c("zn","nox","dis","rad","black","medv")]) ;
+GCVscores[1] <-GCV(Boston[,"crim"],Boston[,c("zn","nox","dis","rad","black","medv")]) ;
+AICscores[1] <-AIC(step.sel.mod) ; BICscores[1] <-BIC(step.sel.mod) ; 
+Mallowscores[1] <-myMallows(Boston,step.sel.mod); SUREscores[1] <-mySURE(step.sel.mod)
+ArSscores[1] <-myArS(Boston,step.sel.mod)
+#Forward Selection
+LCVscores[2] <-LCV(Boston[,"crim"],Boston[,c("indus","medv","dis","rad","zn","black")])
+GCVscores[2] <-GCV(Boston[,"crim"],Boston[,c("indus","medv","dis","rad","zn","black")])
+AICscores[2] <-AIC(for.sel.mod) ; BICscores[2] <-BIC(for.sel.mod) ; 
+Mallowscores[2] <-myMallows(Boston,for.sel.mod); SUREscores[2] <-mySURE(for.sel.mod)
+ArSscores[2] <-myArS(Boston,for.sel.mod)
+#Backward elimination
+LCVscores[3] <-LCV(Boston[,"crim"],Boston[,c("zn","nox","dis","rad","black","medv")])
+GCVscores[3] <-GCV(Boston[,"crim"],Boston[,c("zn","nox","dis","rad","black","medv")])
+AICscores[3] <-AIC(back.elim.mod) ; BICscores[3] <-BIC(back.elim.mod) ; 
+Mallowscores[3] <-myMallows(Boston,back.elim.mod); SUREscores[3] <-mySURE(back.elim.mod)
+ArSscores[3] <-myArS(Boston,back.elim.mod)
+# Best Subset models
+LCVscores[4] <-LCV(Boston[,"crim"],Boston[,c("dis")])
+GCVscores[4] <-GCV(Boston[,"crim"],Boston[,c("dis")])
+AICscores[4] <-AIC(best.subset.mod.1) ; BICscores[4] <-BIC(best.subset.mod.1) ; 
+Mallowscores[4] <-myMallows(Boston,best.subset.mod.1); SUREscores[4] <-mySURE(best.subset.mod.1)
+ArSscores[4] <-myArS(Boston,best.subset.mod.1)
+
+LCVscores[5] <-LCV(Boston[,"crim"],Boston[,c("dis","black")])
+GCVscores[5] <-GCV(Boston[,"crim"],Boston[,c("dis","black")])
+AICscores[5] <-AIC(best.subset.mod.2) ; BICscores[5] <-BIC(best.subset.mod.2) ; 
+Mallowscores[5] <-myMallows(Boston,best.subset.mod.2); SUREscores[5] <-mySURE(best.subset.mod.2)
+ArSscores[5] <-myArS(Boston,best.subset.mod.2)
+
+LCVscores[6] <-LCV(Boston[,"crim"],Boston[,c("dis","black","ptratio")])
+GCVscores[6] <-GCV(Boston[,"crim"],Boston[,c("dis","black","ptratio")])
+AICscores[6] <-AIC(best.subset.mod.3) ; BICscores[6] <-BIC(best.subset.mod.3) ; 
+Mallowscores[6] <-myMallows(Boston,best.subset.mod.3); SUREscores[6] <-mySURE(best.subset.mod.3)
+ArSscores[6] <-myArS(Boston,best.subset.mod.3)
+
+LCVscores[7] <-LCV(Boston[,"crim"],Boston[,c("dis","medv","age","lstat")])
+GCVscores[7] <-GCV(Boston[,"crim"],Boston[,c("dis","medv","age","lstat")])
+AICscores[7] <-AIC(best.subset.mod.4) ; BICscores[7] <-BIC(best.subset.mod.4) ; 
+Mallowscores[7] <-myMallows(Boston,best.subset.mod.4); SUREscores[7] <-mySURE(best.subset.mod.4)
+ArSscores[7] <-myArS(Boston,best.subset.mod.4)
+
+LCVscores[8] <-LCV(Boston[,"crim"],Boston[,c("dis","medv","age","lstat","ptratio")])
+GCVscores[8] <-GCV(Boston[,"crim"],Boston[,c("dis","medv","age","lstat","ptratio")])
+AICscores[8] <-AIC(best.subset.mod.5) ; BICscores[8] <-BIC(best.subset.mod.5) ; 
+Mallowscores[8] <-myMallows(Boston,best.subset.mod.5); SUREscores[8] <-mySURE(best.subset.mod.5)
+ArSscores[8] <-myArS(Boston,best.subset.mod.5)
+
+LCVscores[9] <-LCV(Boston[,"crim"],Boston[,c("dis","medv","age","lstat","ptratio","chas")])
+GCVscores[9] <-GCV(Boston[,"crim"],Boston[,c("dis","medv","age","lstat","ptratio","chas")])
+AICscores[9] <-AIC(best.subset.mod.6) ; BICscores[9] <-BIC(best.subset.mod.6) ; 
+Mallowscores[9] <-myMallows(Boston,best.subset.mod.6); SUREscores[9] <-mySURE(best.subset.mod.6)
+ArSscores[9] <-myArS(Boston,best.subset.mod.6)
+
+LCVscores[10] <-LCV(Boston[,"crim"],Boston[,c("dis","medv","age","lstat","ptratio","chas","tax")])
+GCVscores[10] <-GCV(Boston[,"crim"],Boston[,c("dis","medv","age","lstat","ptratio","chas","tax")])
+AICscores[10] <-AIC(best.subset.mod.7) ; BICscores[10] <-BIC(best.subset.mod.7) ; 
+Mallowscores[10] <-myMallows(Boston,best.subset.mod.7); SUREscores[10] <-mySURE(best.subset.mod.7)
+ArSscores[10] <-myArS(Boston,best.subset.mod.7)
+
+LCVscores[11] <-LCV(Boston[,"crim"],Boston[,c("dis","medv","age","lstat","ptratio","chas","tax","black")])
+GCVscores[11] <-GCV(Boston[,"crim"],Boston[,c("dis","medv","age","lstat","ptratio","chas","tax","black")])
+AICscores[11] <-AIC(best.subset.mod.8) ; BICscores[11] <-BIC(best.subset.mod.8) ; 
+Mallowscores[11] <-myMallows(Boston,best.subset.mod.8); SUREscores[11] <-mySURE(best.subset.mod.8)
+ArSscores[11] <-myArS(Boston,best.subset.mod.8)
+
+LCVscores[12] <-LCV(Boston[,"crim"],Boston[,c("zn","dis","medv","age","lstat","ptratio","chas","tax","black")])
+GCVscores[12] <-GCV(Boston[,"crim"],Boston[,c("zn","dis","medv","age","lstat","ptratio","chas","tax","black")])
+AICscores[12] <-AIC(best.subset.mod.9) ; BICscores[12] <-BIC(best.subset.mod.9) ; 
+Mallowscores[12] <-myMallows(Boston,best.subset.mod.9); SUREscores[12] <-mySURE(best.subset.mod.9)
+ArSscores[12] <-myArS(Boston,best.subset.mod.9)
+
+LCVscores[13] <-LCV(Boston[,"crim"],Boston[,c("zn","dis","medv","age","lstat","ptratio","chas","tax","black","nox")])
+GCVscores[13] <-GCV(Boston[,"crim"],Boston[,c("zn","dis","medv","age","lstat","ptratio","chas","tax","black","nox")])
+AICscores[13] <-AIC(best.subset.mod.10) ; BICscores[13] <-BIC(best.subset.mod.10) ; 
+Mallowscores[13] <-myMallows(Boston,best.subset.mod.10); SUREscores[13] <-mySURE(best.subset.mod.10)
+ArSscores[13] <-myArS(Boston,best.subset.mod.10)
+
+LCVscores[14] <-LCV(Boston[,"crim"],Boston[,c("zn","dis","medv","age","lstat","ptratio","chas","tax","black","nox","rad")])
+GCVscores[14] <-GCV(Boston[,"crim"],Boston[,c("zn","dis","medv","age","lstat","ptratio","chas","tax","black","nox","rad")])
+AICscores[14] <-AIC(best.subset.mod.11) ; BICscores[14] <-BIC(best.subset.mod.11) ; 
+Mallowscores[14] <-myMallows(Boston,best.subset.mod.11); SUREscores[14] <-mySURE(best.subset.mod.11)
+ArSscores[14] <-myArS(Boston,best.subset.mod.11)
+
+LCVscores[15] <-LCV(Boston[,"crim"],Boston[,c("zn","dis","medv","age","lstat","ptratio","chas","tax","black","nox","rad","indus")])
+GCVscores[15] <-GCV(Boston[,"crim"],Boston[,c("zn","dis","medv","age","lstat","ptratio","chas","tax","black","nox","rad","indus")])
+AICscores[15] <-AIC(best.subset.mod.12) ; BICscores[15] <-BIC(best.subset.mod.12) ; 
+Mallowscores[15] <-myMallows(Boston,best.subset.mod.12); SUREscores[15] <-mySURE(best.subset.mod.12)
+ArSscores[15] <-myArS(Boston,best.subset.mod.12)
+
+LCVscores[16] <-LCV(Boston[,"crim"],Boston[,c("zn","dis","medv","age","lstat","ptratio","chas","tax","black","nox","rad","indus","rm")])
+GCVscores[16] <-GCV(Boston[,"crim"],Boston[,c("zn","dis","medv","age","lstat","ptratio","chas","tax","black","nox","rad","indus","rm")])
+AICscores[16] <-AIC(best.subset.mod.13) ; BICscores[16] <-BIC(best.subset.mod.13) ; 
+Mallowscores[16] <-myMallows(Boston,best.subset.mod.13); SUREscores[16] <-mySURE(best.subset.mod.13)
+ArSscores[16] <-myArS(Boston,best.subset.mod.13)
+
+# Best models by metric
+match(min(LCVscores),LCVscores)
+match(min(GCVscores),GCVscores)
+match(min(AICscores),AICscores)
+match(min(BICscores),BICscores)
+match(min(SUREscores),SUREscores)
+match(min(Mallowscores),Mallowscores)
+match(max(ArSscores),ArSscores)
+\end{lstlisting}
+
+The models which showed promise are: the best 12-subset model (top in LCV), the step-wise selection model (top in GCV, AIC, BIC and Adjusted R-squared), the best 1-subset model (top in SURE).
+
+\item[(c) ] Does your chosen model involve all of the features in the data set? Why or why not?
+\end{itemize}
+
+Model 1, obtained from step-wise selection was top in terms of the most metrics: AIC, BIC and GCV. Second most frequently "top" model was the best subset selection model of size one.
+Neither of these top recommended models uses all of the predictors. This is because there were a few predictors that were not statistically significant when fit against the response and therefore you wouldn't expect those predictors to be present in the best final model.
+
+\end{document} 
+
+

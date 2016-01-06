@@ -1,0 +1,558 @@
+\documentclass[11pt]{report}
+\setlength{\textheight}{9.1in}
+\setlength{\textwidth}{7.1in}
+\setlength{\topmargin}{-1.1in} %{-.45in}
+\setlength{\oddsidemargin}{-.18in}
+\usepackage{amssymb,amsmath,cancel,listings,tikz,parskip} 	% math package
+\renewcommand{\baselinestretch}{1.2} 
+\newcommand{\bfmath}[1]{\mbox{\boldmath$#1$\unboldmath}}
+\begin{document}
+%\hfill \underline{{\bf PAGE 1}}
+\begin{center}
+{\bf STAT444/844/CM764 ~~~ Assignment \# 3 ~~Winter 2015 ~~Instructor: S. Chenouri}
+{\bf Student: Christopher Alert : Undergraduate student}
+\end{center} 
+\noindent
+{\bf \underline {Due}: March. 24, 2015}\\
+\noindent
+\vspace{1mm} 
+
+\noindent
+{\bf Problem 1) (Penalized least squares and orthogonal design).} In the special case
+of an orthogonal design matrix (i.e., $\mathbf{X}^T\,\mathbf{X}=I_p$) the penalized least squares problem
+$$\min\limits_{\bfmath{\beta}\in\mathbb{R}^p}\,\left\lbrace\, (\mathbf{y}-\mathbf{X}\bfmath{\beta})^T\,(\mathbf{y}-\mathbf{X}\bfmath{\beta})+\lambda\,\sum\limits_{j=1}^p {\tt pen}(|\beta_j|)\,\right\rbrace$$
+becomes solving $p$ one-dimensional shrinkage problems:
+$$\min\limits_{\beta_j\in\mathbb{R}}\left\lbrace\,(\beta_j-\widehat{\beta}_j^{\rm ols})^2+\lambda\,{\tt pen}(|\beta_j|)\,\right\rbrace,\,\quad j=1,\dots,\,p\,.$$
+Now, consider five types of penalized least squares problems.
+\begin{itemize}
+\item[(i) ] When the design matrix $\mathbf{X}$ is orthogonal, show that the ridge estimates are given by
+$$\widehat{\beta}_j^{\rm ridge}=\dfrac{1}{1+\lambda}\,\widehat{\beta}_j^{\rm ols},\qquad j=1,\,\dots,\,p\,.$$ 
+
+$$\frac{\partial }{\partial \beta_j} \beta_j-\widehat{\beta}_j^{\rm ols})^2+\lambda\,\sum_{j=1}^n\beta_j^{2}\, $$
+$$ 2(\beta_j-\widehat{\beta}_j^{\rm ols})+2\lambda\,\beta_j\, = 0 $$
+$$ 2\beta_j-2\widehat{\beta}_j^{\rm ols}+2\lambda\,\beta_j\, = 0 $$
+$$ 2\beta_j+2\lambda\,\beta_j\, = 2\widehat{\beta}_j^{\rm ols} $$
+$$ \beta_j(2+2\lambda\,) = 2\widehat{\beta}_j^{\rm ols} $$
+$$ \widehat{\beta_j}^{ridge} = \frac{1}{(1+\lambda\,)}\widehat{\beta}_j^{\rm ols} ,\,\quad j=1,\dots,\,p\,$$
+
+\newpage
+\item[(ii) ] When the design matrix $\mathbf{X}$ is orthogonal, the nonnegative garrote (NG) estimator seeks a set of non-negative scaling factors $c_j$ for $j=1,\,\dots,\,p$ by solving 
+$$\min\limits_{c_j\geq 0}(c_j\,\widehat{\beta}_j^{\rm ols}-\widehat{\beta}_j^{\rm ols})^2+\lambda\,c_j\,.$$
+Show that the solution has the expression
+$$\widehat{c}_j=\left(1-\dfrac{\lambda}{2\left(\widehat{\beta}_j^{\rm ols} \right)^2} \right)_+\,,\qquad j=1,\,\dots,\,p\,,$$
+where $(z)_+=\max(z,\,0)$. Therefore, the final NG estimator for the $\bfmath{\beta}$ is 
+$$\widehat{\beta}_j^{\rm ng}=\left(1-\dfrac{\lambda}{2\left(\widehat{\beta}_j^{\rm ols} \right)^2} \right)_+\widehat{\beta}_j^{\rm ols},\qquad j=1,\,\dots,\,p\,. $$ 
+
+$$\frac{\partial }{\partial \mathbf{c}_j} c_j\,\widehat{\beta}_j^{\rm ols}-\widehat{\beta}_j^{\rm ols})^2+\lambda\,c_j\, $$
+$$ 2\widehat{\beta}_j^{\rm ols}(c_j\,\widehat{\beta}_j^{\rm ols}-\widehat{\beta}_j^{\rm ols})+\lambda\,= 0 $$ 
+$$ 2c_j(\,\widehat{\beta}_j^{\rm ols})^{2}-2(\widehat{\beta}_j^{\rm ols})^{2}+\lambda\,= 0 $$
+$$ 2c_j(\,\widehat{\beta}_j^{\rm ols})^{2}= 2(\widehat{\beta}_j^{\rm ols})^{2}-\lambda\, $$
+$$ c_j= \frac{2(\widehat{\beta}_j^{\rm ols})^{2}-\lambda\,}{2(\,\widehat{\beta}_j^{\rm ols})^{2}} $$
+$$ c_j= \frac{2(\widehat{\beta}_j^{\rm ols})^{2}-\lambda\,}{2(\,\widehat{\beta}_j^{\rm ols})^{2}} $$
+$$ \widehat{c_j}= \left( 1 - \frac{\lambda\,}{2(\,\widehat{\beta}_j^{\rm ols})^{2}}\,\right) $$
+$$ , \text{with the constraint that} c_j \geq 0 \text{we get }$$
+$$ \widehat{c_j}= \left( 1 - \frac{\lambda\,}{2(\,\widehat{\beta}_j^{\rm ols})^{2}}\,\right)_+\,,\qquad j=1,\,\dots,\,p\,, $$
+$$\text{so hence,} $$
+$$\widehat{\beta}_j^{\rm ng}=\left(1-\dfrac{\lambda}{2\left(\widehat{\beta}_j^{\rm ols} \right)^2} \right)_+\widehat{\beta}_j^{\rm ols},\qquad j=1,\,\dots,\,p\,. $$
+
+\newpage
+\item[(iii) ] When the design matrix $\mathbf{X}$ is orthogonal, show that the lasso solution is given by 
+$$\widehat{\beta}_j^{\rm lasso}=\text{sign}\left(\widehat{\beta}_j^{\rm ols}\right)\left(|\widehat{\beta}_j^{\rm ols}|-\lambda/2 \right)_+,\qquad j=1,\,\dots,\,p\,. $$ 
+
+$$\frac{\partial }{\partial \beta_j} ( \beta_j-\widehat{\beta}_j^{\rm ols})^2+\lambda\,\sum_{j=1}^n\,|\beta_j\,| $$
+$$2(\beta_j-\widehat{\beta}_j^{\rm ols})+\lambda\,sign(\beta_j)\, = 0 $$
+$$2\beta_j-2\widehat{\beta}_j^{\rm ols}+\lambda\,sign(\beta_j)\, = 0 $$
+$$2\beta_j = 2\widehat{\beta}_j^{\rm ols} -\lambda\,sign(\beta_j)\,  $$
+$$\beta_j = (\widehat{\beta}_j^{\rm ols} -\frac{\lambda\,\,}{2}\,sign(\beta_j))  $$
+$$\beta_j = (\widehat{\beta}_j^{\rm ols} -\frac{\lambda\,\,}{2}\,sign(\beta_j))  $$
+Case 1: If $\widehat{\beta}_j^{\rm ols} \leq 0$ then need $sign(\beta_j)\, \leq 0$ to minimize the objective function. 
+
+$$\beta_j^{lasso} = \,(\widehat{\beta}_j^{\rm ols} + \frac{\lambda\,\,}{2}\,)  $$
+
+and this is only achieved if the right hand side is negative. 
+
+Case 2: If $\widehat{\beta}_j^{\rm ols} \geq 0$ then need $sign(\beta_j)\, \geq 0$ to minimize the objective function. Otherwise we could flip the sign of $\beta_j$ in $ \beta_j^2 - \beta_j\,\widehat{\beta_j}^{\rm ols}$ to get a smaller objective function.
+
+$$\beta_j^{lasso} = (\widehat{\beta}_j^{\rm ols} -\frac{\lambda\,\,}{2}\,)  $$
+
+and this is only achieved if the right hand side is non-negative.
+
+Hence in both cases:
+
+$$\beta_j^{lasso} = sign(\widehat{\beta}_j^{\rm ols})\,(|\widehat{\beta}_j^{\rm ols}| -\frac{\lambda\,\,}{2}\,)_+ \qquad j=1,\,\dots,\,p\, $$
+
+\newpage
+\item[(iv) ] When the design matrix $\mathbf{X}$ is orthogonal, the na\"{i}ve elastic net problems solve 
+$$\min\limits_{\beta_j\in\mathbb{R}}(\beta_j-\widehat{\beta}_j^{\rm ols})^2+\lambda_1\,|\beta_j|+\lambda_2\,\beta_j^2,\,\quad j=1,\dots,\,p\,.$$
+Show that the na\"{i}ve elastic net  solution is given by 
+$$\widehat{\beta}_j^{\rm nenet}=\text{sign}\left(\widehat{\beta}_j^{\rm ols}\right)\dfrac{\left(|\widehat{\beta}_j^{\rm ols}|-\lambda_1/2 \right)_+}{1+\lambda_2},\qquad j=1,\,\dots,\,p\,. $$ 
+
+$$\frac{\partial }{\partial \beta_j}  (\beta_j-\widehat{\beta}_j^{\rm ols})^2+\lambda_1\,\sum_{j=1}^n|\beta_j|^{2}\,+ \lambda_2\sum_{j=1}^n\,\beta_j^{2}\, $$
+$$ 2(\beta_j-\widehat{\beta}_j^{\rm ols})+\lambda_1\,sign(\beta_j)\,+ 2\lambda_2 \,\beta_j\, = 0 $$
+$$ 2\beta_j + 2\lambda_2 \,\beta_j\,= 2\widehat{\beta}_j^{\rm ols} - \lambda_1\,sign(\beta_j)\,  $$
+$$ \beta_j(2 + 2\lambda_2)\,= 2\widehat{\beta}_j^{\rm ols} - \lambda_1\,sign(\beta_j)\,  $$
+$$ \beta_j= frac{2\widehat{\beta}_j^{\rm ols} - \lambda_1\,sign(\beta_j)\,}{(2 + 2\lambda_2)\,}  $$
+$$ \beta_j= \frac{\widehat{\beta}_j^{\rm ols} - \frac{\,\lambda_1\,sign(\beta_j)\,}{2}\,}{(1 + \lambda_2)\,}  $$
+
+According to logic similar to the lasso estimator:
+
+$$ \beta_j^{\rm nenet}= \text{sign}\left(\widehat{\beta}_j^{\rm ols}\right)\dfrac{\left(|\widehat{\beta}_j^{\rm ols}|-\lambda_1/2 \right)_+}{1+\lambda_2},\qquad j=1,\,\dots,\,p\,  $$
+
+
+\newpage
+\item[(v) ] When the design matrix $\mathbf{X}$ is orthogonal, the $L_0$-penalized least squares problems solve 
+$$\min\limits_{\beta_j\in\mathbb{R}}(\beta_j-\widehat{\beta}_j^{\rm ols})^2+\lambda\,1(|\beta_j|\neq 0),\,\quad j=1,\dots,\,p\,,$$
+where $$1(|\beta_j|\neq 0)=\begin{cases}
+1 & \text{ if } |\beta_j|\neq 0\\
+0 & \text{ if } |\beta_j|= 0\,.
+\end{cases}$$
+Show that the solution is given by
+$$\widehat{\beta}_j=\widehat{\beta}_j^{\rm ols}\,1(|\widehat{\beta}_j^{\rm ols}|>\sqrt{\lambda}),\,\quad j=1,\dots,\,p\,.$$
+This is often called the hard thresholding rule.
+
+If $|\beta_j|\neq 0$ then the objective is: 
+
+$$\beta_j-\widehat{\beta}_j^{\rm ols})^2 + \lambda$$
+
+and the optimal value for $\beta_j$ is $\widehat{\beta}_j^{\rm ols}$
+
+Otherwise: 
+
+$$(\widehat{\beta}_j^{\rm ols})^2 $$
+which can be minimized by :
+
+
+
+\item[vi) ] Comment on the difference in shrinkage effects achieved in items (i) to (v).
+
+The ridge penalty results in a lot of shrinkage: all small but non-zero regression co- efficients.
+The non-negative garotte and lasso penalties in contrast result in many regression coefficients shrunk exactly to zero and a few other regression coefficients with comparatively little shrinkage. 
+The naive elastic net results are in between, with fewer regression coefficients set to zero than in a lasso/ nng setting, and more shrinkage of the other coefficients.
+With hard thresholdingthere is no shrinkage but rather binary selection or dropping of coefficients.
+
+\end{itemize}
+\vspace{1mm}
+
+\noindent
+\newpage
+{\bf Problem 2. (From JWHT)} In this exercise, we will predict the number of applications received using the other variables in the {\tt College} data set posted in D2L.
+\begin{itemize}
+\item[i. ] Split the data set into a training set and a test set.
+\begin{verbatim}
+library(caret)
+college <- read.csv("~/Dropbox/Academic notes/5 A/STAT 444/Assignments/A3/College.csv")
+college <- college[,-1]
+inTrain  <- createDataPartition(college[,"Apps"], p = .6, list = FALSE)
+Train    <- college[inTrain,]
+CV_Test  <- college[-inTrain,]
+\end{verbatim}
+\item[ii. ] Fit a linear model using the least squares on the training set, and report the test error obtained. 
+\begin{verbatim}
+# OLS
+ols.mod <- lm(Apps ~ ., data=Train)
+ols.test <- predict(object = ols.mod,CV_Test)
+ols.test.error <- mean((ols.test -CV_Test[,"Apps"])^2)
+GCV(college$Apps,college[,-2])
+> ols.test.error
+[1] 1634765
+> sqrt(ols.test.error)
+[1] 1278.579
+\end{verbatim}
+\item[iii. ] Fit a ridge regression model on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained.
+\begin{verbatim}
+# Ridge regression
+ctrl <- trainControl(method = "repeatedcv", repeats = 10)
+ridge.mod <- train(Apps ~ ., data = Train,method = 'ridge', 
+                   trControl = ctrl,
+                   metric = "RMSE")
+ridge.test <- predict(object = ridge.mod,CV_Test)
+ridge.test.error <- mean((ridge.test -CV_Test[,"Apps"])^2)
+ridge.test.error
+[1] 1635754
+sqrt(ridge.test.error)
+[1] 1278.966
+\end{verbatim}
+
+\item[iv. ] Fit a lasso regression on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained, along with the number of non-zero coefficient estimates.
+\begin{verbatim}
+# Lasso regression: test error and num of nonzero coeffs
+lasso.cv<-cv.lars(as.matrix(Train[,-c(1,2)]),Train$Apps,K=10,index=seq(0,1, length=100),
+                   type="lasso",mode="fraction",trace=TRUE,max.steps=80)
+ideal_l1_ratio <- lasso.cv$index[which.max(lasso.cv$cv - lasso.cv$cv.error <= min(lasso.cv$cv))]
+min(lasso.cv$cv)
+lasso.mod <- lars(as.matrix(Train[,-c(1,2)]),Train$Apps,type="lasso",trace=TRUE,max.steps=80)
+scaled_coefs <- scale(lasso.mod$beta, FALSE, 1 / lasso.mod$normx)
+l1 <- apply(X = scaled_coefs, MARGIN = 1, FUN = function(x) sum(abs(x)))
+coef(lasso.mod)[which.max(l1 / tail(l1, 1) > ideal_l1_ratio
+lasso.test <- CV_Test.lass%*%coef(lasso.mod)[which.max(l1 / tail(l1, 1) > ideal_l1_ratio),]
+lasso.test.error <- mean((lasso.test -CV_Test[,"Apps"])^2)
+lasso.test.error
+> lasso.test.error
+[1] 2146575
+> sqrt(lasso.test.error)
+[1] 1465.119
+\end{verbatim}
+
+There were 2 non-zero coefficients in the final model.
+
+\item[iv. ] Fit an adaptive lasso regression on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained, along with the number of non-zero coefficient estimates.
+\begin{verbatim}
+# Apaptive lasso: test error and non-zeros
+library(parcor)
+Y <- Train$Apps
+levels(Train[,"Private"]) <- c("Yes","No",1,0)
+Train[is.na(Train$Private),"Private"] <- 0
+Train[Train[,"Private"]== "Yes","Private"] <- 1
+Train[Train[,"Private"]!= "Yes","Private"] <- 0
+X <- as.matrix(Train[,-c(1,2)])
+adalass.mod <- adalasso(X,Y,k=10)
+#
+levels(CV_Test[,"Private"]) <- c("Yes","No",1,0)
+CV_Test[is.na(CV_Test$Private),"Private"] <- 0
+CV_Test[CV_Test[,"Private"]== "Yes","Private"] <- 1
+CV_Test[CV_Test[,"Private"]!= "Yes","Private"] <- 0
+CV_Test.ada <- as.matrix(CV_Test[,-c(1,2)])
+adalasso.test <- CV_Test.ada[,-1]%*%adalass.mod$coefficients.adalasso
+adalasso.test.error <- mean((adalasso.test -CV_Test[,"Apps"])^2)
+> adalasso.test.error
+[1] 1802372
+> sqrt(adalasso.test.error)
+[1] 1342.525
+\end{verbatim}
+
+There were 14 non-zero coefficients.
+
+\item[v. ] Fit an elastic-net regression on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained, along with the number of non-zero coefficient estimates.
+\begin{verbatim}
+enet.cv <- glmnet::cv.glmnet(X, Y)
+enet.coef <- as.vector(coef(enet.cv, s = "lambda.1se"))
+enet.test <- CV_Test.ada%*%enet.coef[-1]
+enet.test.error <- mean((adalasso.test -CV_Test[,"Apps"])^2)
+enet.test.error
+sqrt(enet.test.error)
+> enet.test.error
+[1] 2153528
+> sqrt(enet.test.error)
+[1] 1467.49
+\end{verbatim}
+
+There were three non-zero coefficients in the final model.
+
+\item[vi. ]  Comment on the results obtained. How accurately can we predict the number of college applications received? Is there much difference among the test errors resulting from these five approaches?
+
+The results do not look very promising. The root mean squared errors of the different models fit were all around 1300+ apps. This type of error is very significant given the distribution of the number of applications.
+
+\includegraphics[scale=0.4]{appshist.png}
+
+The size of the average error relative to the mean/median number of applications suggests that predictions are not reliable.
+\end{itemize} 
+
+\vspace{1mm}
+\noindent
+\newpage
+{\bf Problem 3.}  Get the data on fragments of glass collected in forensic work from the course page in D2L. Let $Y$ be refractive index and let $x$ be aluminium content (the fourth variable). Perform a nonparametric regression to fit the model $Y=f(x)+\epsilon$. Use the following estimators:  
+\begin{itemize}
+\item[i) ] regressogram, 
+\begin{verbatim}
+glass <- read.csv("~/Dropbox/Academic notes/5 A/STAT 444/Assignments/A3/glass.dat",sep="")
+Y <- glass[,1]
+x <- glass[,4]
+#regressogram
+cs <- c(-Inf,quantile(x,probs=c(1/5,2/5,3/5,4/5)),Inf)
+cs1 <- c(-Inf,seq(0.29,3.6,1),Inf)
+cs2 <- c(-Inf,seq(0.29,3.6,0.5),Inf)
+cs3 <- c(-Inf,seq(0.29,3.6,0.25),Inf)
+cs4 <- c(-Inf,seq(0.29,3.6,0.05),Inf)
+cs5 <- c(-Inf,seq(0.29,3.6,0.01),Inf)
+o <- order(x)
+R <- cut(x,cs3)
+plot(x,Y,main="Bin Smoother",pch=".")
+lines(x[o],lm(Y~R)$fitted[o])
+## GCV  for regressogram - cite http://wwwf.imperial.ac.uk/~bm508/teaching/AppStats/Lecture7.pdf
+regresso.gcv <- function(y,x,cs) {
+        n <- length(y)
+        R <- cut(x,cs)
+        denom <- 1 - length(summary(R))/n
+        num <- y - lm(y~R)$fitted
+        GCV <- mean((num/denom)^2)
+        return(GCV)
+}
+> regresso.gcv(Y,x,cs)
+[1] 7.713926
+> regresso.gcv(Y,x,cs1)
+[1] 8.3945
+> regresso.gcv(Y,x,cs2)
+[1] 7.825354
+> regresso.gcv(Y,x,cs3)
+[1] 7.007995
+> regresso.gcv(Y,x,cs4)
+[1] 9.049001
+> regresso.gcv(Y,x,cs5)
+[1] 7.603488
+# CS3 has the smallest GCV and so we choose that bin width
+## Variance Regressogram
+simple.variance <- function(y){
+        for(i in 1:(length(y)-1)){ 
+                s <- (Y[i+1] - Y[i])^2
+        }
+        s <-mean(s)
+        return(s/2)
+}
+o<-order(x)
+Yo<-Y[o]
+binsigma2hat1 <- simple.variance(Yo)
+# Regressogram smoother
+bin.smooth.matrix<-function(y,bins,ordering,x){
+        n<-length(y)
+        A<-matrix(0,n,n)
+        for (i in 1:n){
+                y<-rep(0,n)
+                y[i]=1
+                bin.sm <- lm(y~bins)
+                yi= lm(y~bins)$fitted[ordering]
+                #yi <- yi[ordering]
+                A[,i]=yi
+        }
+        return((A+t(A))/2)
+}
+S <- bin.smooth.matrix(Y,R,o,x)
+##Estimating variance with the first variance formula
+num<-sum((Y-lm(Y~R)$fitted)^2)
+denum<-length(x)-2*sum(diag(S))+sum(diag(t(S)%*%S))
+binsigma2hat2<-num/denum
+#
+Variance
+> binsigma2hat2
+[1] 5.949363
+#
+norm.s <- norm(S)
+#for(i in nrow(S)){ norm.s[i] <- sqrt(sum(S[i,]^2))}
+##
+# 95% confidence band
+lines(x[o],lm(Y~R)$fitted[o]+qnorm(0.975)*sqrt(binsigma2hat2*norm.s),col=2,lwd=3,lty=2)
+lines(x[o],lm(Y~R)$fitted[o]-qnorm(0.975)*sqrt(binsigma2hat2*norm.s),col=2,lwd=3,lty=2)
+##
+smooth.matrix<-function(x,df){
+        n<-length(x)
+        A<-matrix(0,n,n)
+        for (i in 1:n){
+                y<-rep(0,n)
+                y[i]=1
+                yi=predict(smooth.spline(x,y,df=df),x)$y
+                A[,i]=yi
+        }
+        return((A+t(A))/2)
+}
+## Effective kernel
+Yi <- rep(Y[22],length(x))
+Si <- S[22,]
+plot(Si,Yi)
+\end{verbatim}
+
+\includegraphics[scale=0.35]{bin.png}
+\includegraphics[scale=0.35]{effkern1.png}
+\includegraphics[scale=0.35]{effkern12.png}
+\includegraphics[scale=0.35]{effkern13.png}
+Bin smoother with confidence bands and Effective Kernel
+
+\item[ii) ] kernel,
+\begin{verbatim}
+plot(x[o],Y[o],main="Kernel Smoother",pch=".")
+aux <- ksmooth(x[o],Y[o],kernel="normal",bandwidth=0.35)
+lines(aux$x,aux$y)
+# GCV kernel - cite : http://wwwf.imperial.ac.uk/~bm508/teaching/AppStats/Lecture7.pdf
+
+## Variance kernel
+o<-order(x)
+Yo<-Y[o]
+kernsigma2hat1 <- simple.variance(Yo)
+# Kernel smoother
+k.smooth.matrix<-function(y,band,ordering,x){
+        n<-length(y)
+        A<-matrix(0,n,n)
+        for (i in 1:n){
+                y<-rep(0,n)
+                y[i]=1
+                kern <- ksmooth(x[ordering],y[ordering],kernel="normal",
+                                bandwidth=band)
+                yi= kern$y
+                A[,i]=yi
+        }
+        return((A+t(A))/2)
+}
+S <- k.smooth.matrix(Y,0.35,o,x)
+##Estimating variance with the first variance formula
+num<-sum((Y-aux$y)^2)
+denum<-length(x)-2*sum(diag(S))+sum(diag(t(S)%*%S))
+ksigma2hat2<-num/denum
+#
+Variance
+> ksigma2hat2
+[1] 13.42776
+#
+norm.s <- norm(S)
+#for(i in nrow(S)){ norm.s[i] <- sqrt(sum(S[i,]^2))}
+##
+# 95% confidence band
+lines(x[o],aux$y[o]+qnorm(0.975)*sqrt(ksigma2hat2*norm.s),col=2,lwd=3,lty=2)
+lines(x[o],aux$y[o]-qnorm(0.975)*sqrt(ksigma2hat2*norm.s),col=2,lwd=3,lty=2)
+##
+smooth.matrix<-function(x,df){
+        n<-length(x)
+        A<-matrix(0,n,n)
+        for (i in 1:n){
+                y<-rep(0,n)
+                y[i]=1
+                yi=predict(smooth.spline(x,y,df=df),x)$y
+                A[,i]=yi
+        }
+        return((A+t(A))/2)
+}
+## Effective kernel
+Yi <- rep(Y[22],length(x))
+Si <- S[22,]
+plot(Si,Yi)
+\end{verbatim}
+
+\includegraphics[scale=0.35]{kern.png}
+\includegraphics[scale=0.35]{effkern2.png}
+\includegraphics[scale=0.35]{effkern22.png}
+\includegraphics[scale=0.35]{effkern23.png}
+Kernel with confidence bands and Effective Kernel
+
+
+
+\item[iii) ] local linear,
+\begin{verbatim}
+#local linear
+library(locfit)
+h<-seq(0.29,3.5,0.01)
+alphamatrix<-matrix(0,ncol=2,nrow=length(h))
+alphamatrix[,2]<- h
+## compute GCV scores for all values given by h
+gcvYlocfit<-gcvplot(Y~x,alpha=alphamatrix,deg=1)
+###### Find the optimal h
+opt.h<-max(gcvYlocfit$alpha[gcvYlocfit$values==
+                                      min(gcvYlocfit$values),2])
+###### perform locfit with optimal bandwidth h
+Ylocfit.opt<-locfit(Y~x,alpha=c(0,opt.h),deg=1)
+plot(x,Y,xlab="x since seroconversion",ylab="Y",
+     main="Local linear regression with optimum h")
+lines(Ylocfit.opt,lwd=3,col="blue")
+#
+# Fit local linear to estimate variance function
+Z=log((Y-predict(Ylocfit.opt,x))^2)
+h<-seq(0.29,3.5,0.01)
+alphamatrix<-matrix(0,ncol=2,nrow=length(h))
+alphamatrix[,2]<-h
+gcvsig2locfit<-gcvplot(Z~x,alpha=alphamatrix,deg=1) 
+opt.h<-max(gcvsig2locfit$alpha[gcvsig2locfit$values==min(gcvsig2locfit$values),2])
+Zlocfit<-locfit(Z~x,alpha=c(0,opt.h),deg=1)
+Zlocfitpred<-predict(Zlocfit,where="data") 
+Sigma2f<-exp(Zlocfitpred)
+plot(x[o],Sigma2f[o],xlab="x",ylab="Variance", main="Local linear estimate of variance function","l",lwd=2)
+nu1<-as.numeric(Ylocfit.opt$dp[6])
+nu2<-as.numeric(Ylocfit.opt$dp[7]) 
+lfsigma2hat1<-sum(residuals(Ylocfit.opt)^2)/(length(x)-2*nu1+nu2)
+lfsigma2hat1
+# Variance
+> lfsigma2hat1
+[1] 6.486239
+
+#
+diaghat<-predict(Ylocfit.opt,where="data",what="inf1")
+norm.s<-predict(Ylocfit.opt,where="data",what="vari") 
+critval<-kappa0(Ylocfit.opt,cov=0.975)$crit.val 
+locfitYpred<-predict(Ylocfit.opt,where="data")
+##############Pointwise bands
+locfitYpred <- predict(Ylocfit.opt,x)
+plot(x[o],locfitYpred[o],lwd=3,xlab="x",ylab="Y",
+     main="Local linear regression fit, opt.h=0.72, and 95% conf. band",
+     cex=3,cex.axis=1.3,,ylim=c(-6,6),cex.lab=1.3,type="l") 
+lines(x[o],locfitYpred[o]+qnorm(0.975)*sqrt(lfsigma2hat1*norm.s[o]),col=2,lwd=3,lty=2)
+lines(x[o],locfitYpred[o]-qnorm(0.975)*sqrt(lfsigma2hat1*norm.s[o]),col=2,lwd=3,lty=2) 
+legend(c(1,5),lwd=c(3,3),lty=c(1,2),col=c(1,2),
+       c("estimate","95% pointwise band, constant variance"))
+######## Simultaneous bands
+plot(x[o],locfitYpred[o],lwd=3,ylim=c(-6,6),xlab="x",ylab="Y",main="Local linear regression fit, opt.h=0.72, and 95% conf. band",
+     cex=3,cex.axis=1.3,cex.lab=1.3,type="l")
+lines(x[o],locfitYpred[o]+critval*sqrt(lfsigma2hat1*norm.s[o]),col=2,lwd=3,lty=2)
+lines(x[o],locfitYpred[o]-critval*sqrt(lfsigma2hat1*norm.s[o]),col=2,lwd=3,lty=2)
+legend(c(1,5),c(1,5),lwd=c(3,3),lty=c(1,2),col=c(1,2),c("estimate","95% simultaneous band, constant variance"))                                      
+##
+\end{verbatim}
+
+\includegraphics[scale=0.4]{locfit.png}
+Local linear with confidence bands   and Effective Kernel
+
+
+\item[iv) ] cubic spline,
+\begin{verbatim}
+# cubic spline 
+# fit smoothing spline
+splinefit1<-smooth.spline(x,Y,cv=FALSE,
+                          all.knots=FALSE,nknots=15)
+# The scatter plot of the data
+plot(x,Y,xlab="x since ",
+     ylab="Y",main="Cubic spline fit with 15 knots")
+# added the fitted curve to the scatter plot
+lines(splinefit1,lwd=3,col="blue")
+#######
+smooth.matrix<-function(x,df){
+        n<-length(x)
+        A<-matrix(0,n,n)
+        for (i in 1:n){
+                y<-rep(0,n)
+                y[i]=1
+                yi=predict(smooth.spline(x,y,df=df),x)$y
+                A[,i]=yi
+        }
+        return((A+t(A))/2)
+}
+splinefit1<-smooth.spline(x,Y,cv=FALSE,
+                          all.knots=FALSE,nknots=15)
+df<-splinefit1$df
+S<-smooth.matrix(x,df)
+## Variance Regressogram
+# Cubic Spline smoother
+##Estimating variance with the first variance formula
+num<-sum((Y-lm(Y~R)$fitted)^2)
+denum<-length(x)-2*sum(diag(S))+sum(diag(t(S)%*%S))
+cubsigma2hat2<-num/denum
+# 
+Variance
+> cubsigma2hat2
+[1] 6.387228
+
+
+#
+norm.s <- norm(S)
+#for(i in nrow(S)){ norm.s[i] <- sqrt(sum(S[i,]^2))}
+##
+# 95% confidence band
+lines(x[o],predict(smooth.spline(x,Y,df=df),x)$y[o]+qnorm(0.975)*sqrt(cubsigma2hat2*norm.s),col=2,lwd=3,lty=2)
+lines(x[o],predict(smooth.spline(x,Y,df=df),x)$y[o]-qnorm(0.975)*sqrt(cubsigma2hat2*norm.s),col=2,lwd=3,lty=2)
+## Effective kernel
+Yi <- rep(Y[22],length(x))
+Si <- S[22,]
+plot(Si,Yi)
+\end{verbatim}
+
+\includegraphics[scale=0.35]{cubspline.png}
+\includegraphics[scale=0.35]{effkern4.png}
+\includegraphics[scale=0.35]{effkern32.png}
+\includegraphics[scale=0.35]{effkern33.png}
+
+Cubic Spline with confidence bands and Effective Kernel
+
+
+\end{itemize}
+In each case, use cross-validation to choose the amount of smoothing. Estimate the variance. Construct 95 percent confidence bands for your estimates. Pick a few values of $x$ and, for each value, plot the effective kernel for each smoothing method. Visually compare the effective kernels. \\
+
+
+
+%\includegraphics[scale=0.4]{effkern3.png}
+
+
+
+\end{document}

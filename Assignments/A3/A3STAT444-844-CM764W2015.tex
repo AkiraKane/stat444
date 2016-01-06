@@ -1,0 +1,78 @@
+\documentclass[11pt]{report}
+\setlength{\textheight}{9.1in}
+\setlength{\textwidth}{7.1in}
+\setlength{\topmargin}{-1.1in} %{-.45in}
+\setlength{\oddsidemargin}{-.18in}
+\usepackage{amssymb,amsmath} 	% math package
+\renewcommand{\baselinestretch}{1.2} 
+\newcommand{\bfmath}[1]{\mbox{\boldmath$#1$\unboldmath}}
+\begin{document}
+%\hfill \underline{{\bf PAGE 1}}
+\begin{center}
+{\bf STAT444/844/CM764 ~~~ Assignment \# 3 ~~Winter 2015 ~~Instructor: S. Chenouri}
+\end{center} 
+\noindent
+{\bf \underline {Due}: March. 24, 2015}\\
+\noindent
+{\bf Instruction: Both graduate and undergraduate students must clearly mention on submitted solution their level: ``Graduate student" or ``Undergraduate student". You must typeset your solution using {\tt Latex}. A  {\tt Latex} template can be find in D2L. Be clear in your solutions and make sure to explain your findings.} \\
+\vspace{1mm} 
+
+\noindent
+{\bf Problem 1) (Penalized least squares and orthogonal design).} In the special case
+of an orthogonal design matrix (i.e., $\mathbf{X}^T\,\mathbf{X}=I_p$) the penalized least squares problem
+$$\min\limits_{\bfmath{\beta}\in\mathbb{R}^p}\,\left\lbrace\, (\mathbf{y}-\mathbf{X}\bfmath{\beta})^T\,(\mathbf{y}-\mathbf{X}\bfmath{\beta})+\lambda\,\sum\limits_{j=1}^p {\tt pen}(|\beta_j|)\,\right\rbrace$$
+becomes solving $p$ one-dimensional shrinkage problems:
+$$\min\limits_{\beta_j\in\mathbb{R}}\left\lbrace\,(\beta_j-\widehat{\beta}_j^{\rm ols})^2+\lambda\,{\tt pen}(|\beta_j|)\,\right\rbrace,\,\quad j=1,\dots,\,p\,.$$
+Now, consider five types of penalized least squares problems.
+\begin{itemize}
+\item[(i) ] When the design matrix $\mathbf{X}$ is orthogonal, show that the ridge estimates are given by
+$$\widehat{\beta}_j^{\rm ridge}=\dfrac{1}{1+\lambda}\,\widehat{\beta}_j^{\rm ols},\qquad j=1,\,\dots,\,p\,.$$ 
+\item[(ii) ] When the design matrix $\mathbf{X}$ is orthogonal, the nonnegative garrote (NG) estimator seeks a set of non-negative scaling factors $c_j$ for $j=1,\,\dots,\,p$ by solving 
+$$\min\limits_{c_j\geq 0}(c_j\,\widehat{\beta}_j^{\rm ols}-\widehat{\beta}_j^{\rm ols})^2+\lambda\,c_j\,.$$
+Show that the solution has the expression
+$$\widehat{c}_j=\left(1-\dfrac{\lambda}{2\left(\widehat{\beta}_j^{\rm ols} \right)^2} \right)_+\,,\qquad j=1,\,\dots,\,p\,,$$
+where $(z)_+=\max(z,\,0)$. Therefore, the final NG estimator for the $\bfmath{\beta}$ is 
+$$\widehat{\beta}_j^{\rm ng}=\left(1-\dfrac{\lambda}{2\left(\widehat{\beta}_j^{\rm ols} \right)^2} \right)_+\widehat{\beta}_j^{\rm ols},\qquad j=1,\,\dots,\,p\,. $$ 
+\item[(iii) ] When the design matrix $\mathbf{X}$ is orthogonal, show that the lasso solution is given by 
+$$\widehat{\beta}_j^{\rm lasso}=\text{sign}\left(\widehat{\beta}_j^{\rm ols}\right)\left(|\widehat{\beta}_j^{\rm ols}|-\lambda/2 \right)_+,\qquad j=1,\,\dots,\,p\,. $$ 
+\item[(iv) ] When the design matrix $\mathbf{X}$ is orthogonal, the na\"{i}ve elastic net problems solve 
+$$\min\limits_{\beta_j\in\mathbb{R}}(\beta_j-\widehat{\beta}_j^{\rm ols})^2+\lambda_1\,|\beta_j|+\lambda_2\,\beta_j^2,\,\quad j=1,\dots,\,p\,.$$
+Show that the na\"{i}ve elastic net  solution is given by 
+$$\widehat{\beta}_j^{\rm nenet}=\text{sign}\left(\widehat{\beta}_j^{\rm ols}\right)\dfrac{\left(|\widehat{\beta}_j^{\rm ols}|-\lambda_1/2 \right)_+}{1+\lambda_2},\qquad j=1,\,\dots,\,p\,. $$ 
+\item[(v) ] When the design matrix $\mathbf{X}$ is orthogonal, the $L_0$-penalized least squares problems solve 
+$$\min\limits_{\beta_j\in\mathbb{R}}(\beta_j-\widehat{\beta}_j^{\rm ols})^2+\lambda\,1(|\beta_j|\neq 0),\,\quad j=1,\dots,\,p\,,$$
+where $$1(|\beta_j|\neq 0)=\begin{cases}
+1 & \text{ if } |\beta_j|\neq 0\\
+0 & \text{ if } |\beta_j|= 0\,.
+\end{cases}$$
+Show that the solution is given by
+$$\widehat{\beta}_j=\widehat{\beta}_j^{\rm ols}\,1(|\widehat{\beta}_j^{\rm ols}|>\sqrt{\lambda}),\,\quad j=1,\dots,\,p\,.$$
+This is often called the hard thresholding rule.
+\item[vi) ] Comment on the difference in shrinkage effects achieved in items (i) to (v).
+\end{itemize}
+\vspace{1mm}
+
+\noindent
+{\bf Problem 2. (From JWHT)} In this exercise, we will predict the number of applications received using the other variables in the {\tt College} data set posted in D2L.
+\begin{itemize}
+\item[i. ] Split the data set into a training set and a test set.
+\item[ii. ] Fit a linear model using the least squares on the training set, and report the test error obtained. 
+\item[iii. ] Fit a ridge regression model on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained.
+\item[iv. ] Fit a lasso regression on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained, along with the number of non-zero coefficient estimates.
+\item[iv. ] Fit an adaptive lasso regression on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained, along with the number of non-zero coefficient estimates.
+\item[v. ] Fit an elastic-net regression on the training set, with $\lambda$ chosen by cross-validation. Report the test error obtained, along with the number of non-zero coefficient estimates.
+\item[vi. ]  Comment on the results obtained. How accurately can we predict the number of college applications received? Is there much difference among the test errors resulting from these five approaches?
+\end{itemize} 
+
+\vspace{1mm}
+\noindent
+{\bf Problem 3.}  Get the data on fragments of glass collected in forensic work from the course page in D2L. Let $Y$ be refractive index and let $x$ be aluminium content (the fourth variable). Perform a nonparametric regression to fit the model $Y=f(x)+\epsilon$. Use the following estimators:  
+\begin{itemize}
+\item[i) ] regressogram, 
+\item[ii) ] kernel,
+\item[iii) ] local linear,
+\item[iv) ] cubic spline,
+\end{itemize}
+In each case, use cross-validation to choose the amount of smoothing. Estimate the variance. Construct 95 percent confidence bands for your estimates. Pick a few values of $x$ and, for each value, plot the effective kernel for each smoothing method. Visually compare the effective kernels. \\
+
+\end{document} 
